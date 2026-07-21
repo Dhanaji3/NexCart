@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: ecommerce
+spec:
+  schedule: "0 2 * * *" # daily at 02:00
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pg-dump
+              image: ghcr.io/your-org/backup-uploader:latest
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: POSTGRES_PASSWORD
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  mkdir -p /backups
+                  export PGPASSWORD="$PGPASSWORD"
+                  export S3_BUCKET="${S3_BUCKET:-$S3_BUCKET}"
+                  /app/entrypoint.sh
+          volumes:
+            - name: pg-backup
+              persistentVolumeClaim:
+                claimName: postgres-pvc
+          volumeMounts:
+            - name: pg-backup
+              mountPath: /backups

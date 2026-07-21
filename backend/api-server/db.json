@@ -1,0 +1,440 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "password123",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+      "role": "customer"
+    },
+    {
+      "id": 2,
+      "name": "Admin User",
+      "email": "admin@vueshop.com",
+      "password": "admin123",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin",
+      "role": "admin"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Wireless Noise-Canceling Headphones",
+      "description": "Premium over-ear headphones with active noise cancellation, 30-hour battery life, and Hi-Res audio support.",
+      "price": 299.99,
+      "image": "https://placehold.co/400x400/1a1a2e/42b883?text=Headphones",
+      "category": "electronics",
+      "rating": 4.8,
+      "reviews": 2456,
+      "inStock": true,
+      "sku": "ELEC-001"
+    },
+    {
+      "id": 2,
+      "name": "Smart Fitness Watch Pro",
+      "description": "Advanced fitness tracker with GPS, heart rate monitoring, sleep analysis, and 7-day battery life.",
+      "price": 199.99,
+      "image": "https://placehold.co/400x400/1a1a2e/3b82f6?text=SmartWatch",
+      "category": "electronics",
+      "rating": 4.6,
+      "reviews": 1834,
+      "inStock": true,
+      "sku": "ELEC-002"
+    },
+    {
+      "id": 3,
+      "name": "Ultra-Slim Laptop Stand",
+      "description": "Ergonomic aluminum laptop stand with adjustable height and angle. Compatible with all laptops up to 17 inches.",
+      "price": 49.99,
+      "image": "https://placehold.co/400x400/1a1a2e/f59e0b?text=LaptopStand",
+      "category": "electronics",
+      "rating": 4.5,
+      "reviews": 987,
+      "inStock": true,
+      "sku": "ELEC-003"
+    },
+    {
+      "id": 4,
+      "name": "Premium Cotton T-Shirt",
+      "description": "100% organic cotton crew neck t-shirt. Available in multiple colors. Pre-shrunk and fade-resistant.",
+      "price": 29.99,
+      "image": "https://placehold.co/400x400/1a1a2e/ef4444?text=TShirt",
+      "category": "clothing",
+      "rating": 4.3,
+      "reviews": 3210,
+      "inStock": true,
+      "sku": "CLOTH-001"
+    },
+    {
+      "id": 5,
+      "name": "Classic Denim Jacket",
+      "description": "Timeless denim jacket with a modern fit. Features premium denim fabric and antique brass buttons.",
+      "price": 89.99,
+      "image": "https://placehold.co/400x400/1a1a2e/6366f1?text=DenimJacket",
+      "category": "clothing",
+      "rating": 4.7,
+      "reviews": 1560,
+      "inStock": true,
+      "sku": "CLOTH-002"
+    },
+    {
+      "id": 6,
+      "name": "Running Shoes Ultra Boost",
+      "description": "Lightweight running shoes with responsive cushioning and breathable mesh upper.",
+      "price": 149.99,
+      "image": "https://placehold.co/400x400/1a1a2e/10b981?text=Shoes",
+      "category": "sports",
+      "rating": 4.9,
+      "reviews": 4521,
+      "inStock": true,
+      "sku": "SPORT-001"
+    },
+    {
+      "id": 7,
+      "name": "Yoga Mat Premium",
+      "description": "Extra thick non-slip yoga mat with alignment lines. Made from eco-friendly TPE material.",
+      "price": 39.99,
+      "image": "https://placehold.co/400x400/1a1a2e/8b5cf6?text=YogaMat",
+      "category": "sports",
+      "rating": 4.4,
+      "reviews": 876,
+      "inStock": true,
+      "sku": "SPORT-002"
+    },
+    {
+      "id": 8,
+      "name": "Smart Home Speaker",
+      "description": "Voice-controlled smart speaker with premium sound quality and smart home hub capabilities.",
+      "price": 129.99,
+      "image": "https://placehold.co/400x400/1a1a2e/ec4899?text=Speaker",
+      "category": "electronics",
+      "rating": 4.5,
+      "reviews": 2100,
+      "inStock": true,
+      "sku": "ELEC-004"
+    },
+    {
+      "id": 9,
+      "name": "Stainless Steel Water Bottle",
+      "description": "Double-wall vacuum insulated water bottle. Keeps drinks cold 24hrs or hot 12hrs. BPA-free.",
+      "price": 24.99,
+      "image": "https://placehold.co/400x400/1a1a2e/14b8a6?text=Bottle",
+      "category": "home-garden",
+      "rating": 4.6,
+      "reviews": 5432,
+      "inStock": true,
+      "sku": "HOME-001"
+    },
+    {
+      "id": 10,
+      "name": "Organic Skincare Set",
+      "description": "Complete skincare routine with cleanser, toner, serum, and moisturizer. All-natural ingredients.",
+      "price": 79.99,
+      "image": "https://placehold.co/400x400/1a1a2e/f472b6?text=Skincare",
+      "category": "beauty",
+      "rating": 4.7,
+      "reviews": 1245,
+      "inStock": true,
+      "sku": "BEAUTY-001"
+    },
+    {
+      "id": 11,
+      "name": "Bestseller Novel Collection",
+      "description": "Box set of 5 award-winning novels. Hardcover edition with beautiful cover art.",
+      "price": 59.99,
+      "image": "https://placehold.co/400x400/1a1a2e/a78bfa?text=Books",
+      "category": "books",
+      "rating": 4.8,
+      "reviews": 678,
+      "inStock": true,
+      "sku": "BOOK-001"
+    },
+    {
+      "id": 12,
+      "name": "Indoor Plant Set",
+      "description": "Set of 3 low-maintenance indoor plants with ceramic pots. Perfect for home or office.",
+      "price": 44.99,
+      "image": "https://placehold.co/400x400/1a1a2e/22c55e?text=Plants",
+      "category": "home-garden",
+      "rating": 4.3,
+      "reviews": 432,
+      "inStock": false,
+      "sku": "HOME-002"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Electronics",
+      "slug": "electronics",
+      "icon": "💻"
+    },
+    {
+      "id": 2,
+      "name": "Clothing",
+      "slug": "clothing",
+      "icon": "👕"
+    },
+    {
+      "id": 3,
+      "name": "Home & Garden",
+      "slug": "home-garden",
+      "icon": "🏡"
+    },
+    {
+      "id": 4,
+      "name": "Sports",
+      "slug": "sports",
+      "icon": "⚽"
+    },
+    {
+      "id": 5,
+      "name": "Books",
+      "slug": "books",
+      "icon": "📚"
+    },
+    {
+      "id": 6,
+      "name": "Beauty",
+      "slug": "beauty",
+      "icon": "💄"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-2024-001",
+      "userId": 1,
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 1,
+          "price": 299.99
+        },
+        {
+          "productId": 3,
+          "quantity": 2,
+          "price": 49.99
+        }
+      ],
+      "total": 399.97,
+      "status": "delivered",
+      "createdAt": "2024-12-15T10:30:00Z",
+      "shippingAddress": {
+        "fullName": "John Doe",
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "US",
+        "phone": "+1-555-0123"
+      },
+      "paymentMethod": "Visa **** 4242",
+      "trackingNumber": "TRK-98765432"
+    },
+    {
+      "id": "ORD-2024-002",
+      "userId": 1,
+      "items": [
+        {
+          "productId": 6,
+          "quantity": 1,
+          "price": 149.99
+        }
+      ],
+      "total": 149.99,
+      "status": "shipped",
+      "createdAt": "2024-12-20T14:15:00Z",
+      "shippingAddress": {
+        "fullName": "John Doe",
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "US",
+        "phone": "+1-555-0123"
+      },
+      "paymentMethod": "Mastercard **** 8888",
+      "trackingNumber": "TRK-12345678"
+    },
+    {
+      "id": "ORD-2024-003",
+      "userId": 1,
+      "items": [
+        {
+          "productId": 4,
+          "quantity": 3,
+          "price": 29.99
+        },
+        {
+          "productId": 10,
+          "quantity": 1,
+          "price": 79.99
+        }
+      ],
+      "total": 169.96,
+      "status": "processing",
+      "createdAt": "2024-12-28T09:45:00Z",
+      "shippingAddress": {
+        "fullName": "John Doe",
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "US",
+        "phone": "+1-555-0123"
+      },
+      "paymentMethod": "PayPal john@example.com",
+      "trackingNumber": null
+    },
+    {
+      "id": "ORD-2026-004",
+      "userId": 1,
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 2,
+          "price": 299.99
+        }
+      ],
+      "total": 599.98,
+      "status": "pending",
+      "createdAt": "2026-05-25T14:06:45.750Z",
+      "shippingAddress": {
+        "fullName": "wda",
+        "street": "dsdsdfsdsdc",
+        "city": "fsfsfs",
+        "state": "fd2",
+        "zipCode": "234242",
+        "country": "US",
+        "phone": "23432423"
+      },
+      "paymentMethod": "Card ending 4324",
+      "trackingNumber": null
+    },
+    {
+      "id": "ORD-2026-005",
+      "userId": 1,
+      "items": [
+        {
+          "productId": 11,
+          "quantity": 2,
+          "price": 59.99
+        }
+      ],
+      "total": 119.98,
+      "status": "pending",
+      "createdAt": "2026-05-25T18:11:48.524Z",
+      "shippingAddress": {
+        "fullName": "",
+        "street": "",
+        "city": "",
+        "state": "",
+        "zipCode": "",
+        "country": "US",
+        "phone": ""
+      },
+      "paymentMethod": "Card ending ",
+      "trackingNumber": null
+    },
+    {
+      "id": "ORD-2026-006",
+      "userId": 2,
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 1,
+          "price": 299.99
+        },
+        {
+          "productId": 2,
+          "quantity": 1,
+          "price": 199.99
+        },
+        {
+          "productId": 3,
+          "quantity": 1,
+          "price": 49.99
+        },
+        {
+          "productId": 8,
+          "quantity": 1,
+          "price": 129.99
+        }
+      ],
+      "total": 679.96,
+      "status": "pending",
+      "createdAt": "2026-05-26T05:21:24.386Z",
+      "shippingAddress": {
+        "fullName": "",
+        "street": "",
+        "city": "",
+        "state": "",
+        "zipCode": "",
+        "country": "US",
+        "phone": ""
+      },
+      "paymentMethod": "Card ending ",
+      "trackingNumber": null
+    },
+    {
+      "id": "ORD-2026-007",
+      "userId": 2,
+      "items": [
+        {
+          "productId": 2,
+          "quantity": 1,
+          "price": 199.99
+        }
+      ],
+      "total": 199.99,
+      "status": "pending",
+      "createdAt": "2026-06-15T08:50:36.972Z",
+      "shippingAddress": {
+        "fullName": "jhdjhfd",
+        "street": "dsbhbhcshbdc",
+        "city": "nsbdacbhd",
+        "state": "mh",
+        "zipCode": "237231",
+        "country": "US",
+        "phone": "1231231231231"
+      },
+      "paymentMethod": "PayPal",
+      "trackingNumber": null
+    },
+    {
+      "id": "ORD-2026-008",
+      "userId": 2,
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 1,
+          "price": 299.99
+        }
+      ],
+      "total": 299.99,
+      "status": "pending",
+      "createdAt": "2026-06-15T08:54:05.240Z",
+      "shippingAddress": {
+        "fullName": "",
+        "street": "",
+        "city": "",
+        "state": "",
+        "zipCode": "",
+        "country": "US",
+        "phone": ""
+      },
+      "paymentMethod": "Card ending sscc",
+      "trackingNumber": null
+    }
+  ],
+  "cart": [
+    {
+      "id": "6761cad9-0656-44ff-908d-008c5bd11ac3",
+      "userId": 1,
+      "productId": 5,
+      "quantity": 2
+    }
+  ],
+  "wishlist": []
+}

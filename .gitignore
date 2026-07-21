@@ -1,0 +1,44 @@
+node_modules/
+dist/
+*.local
+.env.local
+.env.*.local
+
+# Generated dependencies and build caches
+frontend/node_modules/
+frontend/**/dist/
+backend/api-server/node_modules/
+backend/backend-springboot/.gradle/
+backend/backend-springboot/build/
+backend/backend-springboot/target/
+backend/backend-springboot/.classpath
+backend/backend-springboot/.factorypath
+backend/backend-springboot/.project
+backend/backend-springboot/.settings/
+backend/backend-springboot/.springBeans
+backend/backend-springboot/.sts4-cache/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Build
+*.tsbuildinfo

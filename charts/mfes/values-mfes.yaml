@@ -1,0 +1,43 @@
+apps:
+  - name: mfe-auth
+    image: frontend-mfe-auth
+    tag: "{{ .Values.tag }}"
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+  - name: mfe-products
+    image: frontend-mfe-products
+    tag: "{{ .Values.tag }}"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+  - name: mfe-cart
+    image: frontend-mfe-cart
+    tag: "{{ .Values.tag }}"
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+  - name: mfe-checkout
+    image: frontend-mfe-checkout
+    tag: "{{ .Values.tag }}"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+  - name: mfe-orders
+    image: frontend-mfe-orders
+    tag: "{{ .Values.tag }}"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+  - name: mfe-admin
+    image: frontend-mfe-admin
+    tag: "{{ .Values.tag }}"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"

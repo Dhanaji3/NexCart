@@ -1,0 +1,3 @@
+-- Flyway migration: update orders_status_check to include PROCESSING
+ALTER TABLE orders DROP CONSTRAINT IF EXISTS orders_status_check;
+ALTER TABLE orders ADD CONSTRAINT orders_status_check CHECK (status::text = ANY (ARRAY['PENDING','PROCESSING','CONFIRMED','SHIPPED','DELIVERED','CANCELLED']::text[]));

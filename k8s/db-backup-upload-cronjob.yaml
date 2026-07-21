@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup-uploader
+  namespace: ecommerce
+spec:
+  # Run 10 minutes after the dump job (assumes dump completes within that window)
+  schedule: "10 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup-uploader
+              image: ghcr.io/your-org/backup-uploader:latest
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secrets
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secrets
+                      key: AWS_SECRET_ACCESS_KEY
+                - name: S3_BUCKET
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secrets
+                      key: S3_BUCKET
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  for f in /backups/*.dump; do
+                    [ -f "$f" ] || continue
+                    echo "Uploading $f"
+                    aws s3 cp "$f" "s3://${S3_BUCKET}/backups/$(basename "$f")"
+                    rm -f "$f"
+                  done
+              volumeMounts:
+                - name: pg-backup
+                  mountPath: /backups
+          volumes:
+            - name: pg-backup
+              persistentVolumeClaim:
+                claimName: postgres-pvc

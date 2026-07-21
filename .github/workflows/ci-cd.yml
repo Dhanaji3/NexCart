@@ -1,0 +1,136 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      JAVA_TOOL_OPTIONS: -Xmx1024m
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build backend
+        working-directory: backend/backend-springboot
+        run: ./gradlew clean build -x test --no-daemon
+
+      - name: Run backend tests
+        working-directory: backend/backend-springboot
+        run: ./gradlew test --no-daemon
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend host and MFEs
+        working-directory: frontend
+        run: |
+          npm run build --workspace=host || true
+          npm run build --workspace=mfe-auth || true
+          npm run build --workspace=mfe-products || true
+          npm run build --workspace=mfe-cart || true
+          npm run build --workspace=mfe-checkout || true
+          npm run build --workspace=mfe-orders || true
+          npm run build --workspace=mfe-admin || true
+
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push backend image
+        run: |
+          docker build -t ${{ secrets.DOCKER_REGISTRY }}/backend-springboot:${{ github.sha }} -f backend/backend-springboot/Dockerfile backend/backend-springboot
+          docker push ${{ secrets.DOCKER_REGISTRY }}/backend-springboot:${{ github.sha }}
+
+      - name: Build and push frontend images (host + MFEs)
+        run: |
+          docker build --build-arg APP_NAME=host -t ${{ secrets.DOCKER_REGISTRY }}/frontend-host:${{ github.sha }} -f frontend/Dockerfile frontend
+          docker push ${{ secrets.DOCKER_REGISTRY }}/frontend-host:${{ github.sha }}
+          for APP in mfe-auth mfe-products mfe-cart mfe-checkout mfe-orders mfe-admin; do
+            docker build --build-arg APP_NAME=$APP -t ${{ secrets.DOCKER_REGISTRY }}/$APP:${{ github.sha }} -f frontend/Dockerfile frontend
+            docker push ${{ secrets.DOCKER_REGISTRY }}/$APP:${{ github.sha }}
+          done
+
+      - name: Build and push backup-uploader image
+        run: |
+          docker build -t ${{ secrets.DOCKER_REGISTRY }}/backup-uploader:${{ github.sha }} -f scripts/backup-uploader/Dockerfile scripts/backup-uploader
+          docker push ${{ secrets.DOCKER_REGISTRY }}/backup-uploader:${{ github.sha }}
+
+  deploy-to-k8s:
+    runs-on: ubuntu-latest
+    needs: docker-build-and-push
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Configure kubeconfig
+        run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode > kubeconfig
+
+      - name: Apply k8s manifests
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        run: |
+          kubectl apply -f k8s/00-common.yaml
+          kubectl apply -f k8s/01-database.yaml
+          # Use Helm to deploy backend and frontend charts with new images
+          helm repo add bitnami https://charts.bitnami.com/bitnami || true
+          helm upgrade --install backend charts/backend --namespace ecommerce --create-namespace \
+            --set image.repository=${{ secrets.DOCKER_REGISTRY }}/backend-springboot \
+            --set image.tag=${{ github.sha }}
+          helm upgrade --install frontend charts/frontend --namespace ecommerce \
+            --set image.repository=${{ secrets.DOCKER_REGISTRY }}/frontend-host \
+            --set image.tag=${{ github.sha }}
+          helm upgrade --install mfes charts/mfes --namespace ecommerce \
+            --set imageRegistry=${{ secrets.DOCKER_REGISTRY }} \
+            --set tag=${{ github.sha }}
+
+          # Replace backup-uploader image tag in manifests before apply
+          sed -i "s|ghcr.io/your-org/backup-uploader:latest|${{ secrets.DOCKER_REGISTRY }}/backup-uploader:${{ github.sha }}|g" k8s/db-backup-cronjob.yaml k8s/db-backup-upload-cronjob.yaml || true
+          # Deploy micro-frontends via umbrella chart
+          helm upgrade --install mfes charts/mfes --namespace ecommerce \
+            --set imageRegistry=${{ secrets.DOCKER_REGISTRY }} \
+            --set tag=${{ github.sha }}
+
+          kubectl apply -f k8s/03-frontend.yaml
+
+      - name: Smoke tests (port-forward backend and check /api/health)
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig
+        run: |
+          kubectl -n ecommerce rollout status deployment/backend --timeout=120s
+          kubectl -n ecommerce port-forward svc/backend 8080:8080 >/dev/null 2>&1 &
+          PF_PID=$!
+          sleep 5
+          curl -f http://127.0.0.1:8080/api/health
+          kill $PF_PID || true

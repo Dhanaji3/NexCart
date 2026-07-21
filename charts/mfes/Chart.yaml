@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mfes
+description: Umbrella chart to deploy all Micro-Frontends
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

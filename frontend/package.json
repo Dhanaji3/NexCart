@@ -1,0 +1,52 @@
+{
+  "name": "vue-micro-frontends",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:remotes && concurrently \"npm run dev:auth\" \"npm run dev:products\" \"npm run dev:cart\" \"npm run dev:checkout\" \"npm run dev:orders\" \"npm run dev:admin\" \"npm run dev:host\"",
+    "start": "npm run build && concurrently \"npm run dev:auth\" \"npm run dev:products\" \"npm run dev:cart\" \"npm run dev:checkout\" \"npm run dev:orders\" \"npm run dev:admin\" \"npm run preview --workspace=host\"",
+    "stop": "npx kill-port 3001 5000 5001 5002 5003 5004 5005 5006",
+    "build:remotes": "concurrently \"npm run build --workspace=mfe-auth\" \"npm run build --workspace=mfe-products\" \"npm run build --workspace=mfe-cart\" \"npm run build --workspace=mfe-checkout\" \"npm run build --workspace=mfe-orders\" \"npm run build --workspace=mfe-admin\"",
+    "dev:host": "npm run dev --workspace=host",
+    "dev:auth": "npm run preview --workspace=mfe-auth",
+    "dev:products": "npm run preview --workspace=mfe-products",
+    "dev:cart": "npm run preview --workspace=mfe-cart",
+    "dev:checkout": "npm run preview --workspace=mfe-checkout",
+    "dev:orders": "npm run preview --workspace=mfe-orders",
+    "dev:admin": "npm run preview --workspace=mfe-admin",
+    "build": "npm run build --workspaces",
+    "build:host": "npm run build --workspace=host",
+    "preview": "npm run preview --workspaces",
+    "clean": "npx rimraf host/dist mfe-auth/dist mfe-products/dist mfe-cart/dist mfe-checkout/dist mfe-orders/dist mfe-admin/dist",
+    "lint": "eslint . --ext .ts,.vue",
+    "lint:fix": "eslint . --ext .ts,.vue --fix",
+    "format": "prettier --write \"**/*.{ts,vue,json,md}\"",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "workspaces": [
+    "shared",
+    "host",
+    "mfe-auth",
+    "mfe-products",
+    "mfe-cart",
+    "mfe-checkout",
+    "mfe-orders",
+    "mfe-admin"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@vue/test-utils": "^2.4.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.0.0",
+    "eslint-plugin-vue": "^9.24.0",
+    "jsdom": "^24.0.0",
+    "prettier": "^3.2.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^1.4.0",
+    "vue-eslint-parser": "^9.4.0",
+    "vue-tsc": "^2.0.0",
+    "@vitest/coverage-v8": "^1.4.0"
+  }
+}
