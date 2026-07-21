@@ -1,12 +1,17 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { Notification, NotificationType } from '../types'
-import { generateId } from '../utils/string'
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import type { Notification, NotificationType } from "../types";
+import { generateId } from "../utils/string";
 
-export const useNotificationStore = defineStore('notification', () => {
-  const notifications = ref<Notification[]>([])
+export const useNotificationStore = defineStore("notification", () => {
+  const notifications = ref<Notification[]>([]);
 
-  function add(options: { type: NotificationType; title: string; message?: string; duration?: number }) {
+  function add(options: {
+    type: NotificationType;
+    title: string;
+    message?: string;
+    duration?: number;
+  }) {
     const notification: Notification = {
       id: generateId(),
       type: options.type,
@@ -14,25 +19,26 @@ export const useNotificationStore = defineStore('notification', () => {
       message: options.message,
       duration: options.duration ?? 5000,
       timestamp: Date.now(),
-    }
+    };
 
-    notifications.value.push(notification)
+    notifications.value.push(notification);
 
     // Auto-remove after duration
-    if (notification.duration > 0) {
+    const duration = notification.duration ?? 5000;
+    if (duration > 0) {
       setTimeout(() => {
-        remove(notification.id)
-      }, notification.duration)
+        remove(notification.id);
+      }, duration);
     }
   }
 
   function remove(id: string) {
-    notifications.value = notifications.value.filter((n) => n.id !== id)
+    notifications.value = notifications.value.filter((n) => n.id !== id);
   }
 
   function clearAll() {
-    notifications.value = []
+    notifications.value = [];
   }
 
-  return { notifications, add, remove, clearAll }
-})
+  return { notifications, add, remove, clearAll };
+});

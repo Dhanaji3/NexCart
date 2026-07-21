@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import type { Product, Category } from "shared";
 import { useHomeApi } from "../composables";
 
 const { featuredProducts, categories, loading, fetchHome } = useHomeApi();

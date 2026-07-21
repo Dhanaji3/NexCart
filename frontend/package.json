@@ -24,7 +24,7 @@
     "format": "prettier --write \"**/*.{ts,vue,json,md}\"",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "type-check": "vue-tsc --noEmit"
+    "type-check": "vue-tsc --noEmit -p host/tsconfig.json"
   },
   "workspaces": [
     "shared",
