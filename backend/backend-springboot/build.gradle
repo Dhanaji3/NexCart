@@ -65,6 +65,11 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+bootRun {
+    // Default local development profile
+    systemProperty 'spring.profiles.active', 'dev'
+}
+
 // Run Swagger UI
 task swaggerDocs {
     dependsOn bootRun

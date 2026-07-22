@@ -1,41 +1,62 @@
-# Development Profile Configuration
-# Run with: mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=dev"
-# Or set environment variable: SPRING_PROFILES_ACTIVE=dev
-
 spring:
+  application:
+    name: ecommerce-backend
+
   datasource:
     url: jdbc:postgresql://localhost:5432/ecommerce_db
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-  
+
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: false
+
   jpa:
     hibernate:
-      ddl-auto: create-drop  # Create tables on startup, drop on shutdown (dev only!)
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-    show-sql: true  # Show SQL queries in console
-  
-  # Load sample data on startup (create data.sql in resources)
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+    show-sql: false
+
+  # CORS Configuration
+  web:
+    cors:
+      allowed-origins: "http://localhost:5000,http://localhost:5001,http://localhost:5002,http://localhost:5003,http://localhost:5004,http://localhost:5005,http://localhost:5006"
+      allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
+      allowed-headers: "*"
+      allow-credentials: true
 
 server:
   port: 8080
 
+# JWT Configuration
 jwt:
-  secret: dev-secret-key-change-this-for-production
-  expiration: 86400000  # 24 hours
+  secret: ${JWT_SECRET:your-secret-key-change-this-in-production-at-least-32-characters-long}
+  expiration: 86400000 # 24 hours in milliseconds
 
 logging:
   level:
     root: INFO
     com.ecommerce: DEBUG
-    org.springframework.web: DEBUG
     org.springframework.security: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Springdoc OpenAPI (Swagger) Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    use-root-path: true
+  show-actuator: false

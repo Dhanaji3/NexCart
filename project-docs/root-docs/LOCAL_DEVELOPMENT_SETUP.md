@@ -51,8 +51,11 @@ psql -h localhost -U postgres -d ecommerce_db -c "SELECT 1"
 cd backend/backend-springboot
 
 # Option A: Using Gradle Wrapper (automatically downloads Gradle)
-# First time will download Gradle - be patient!
+# This uses the local development profile by default.
 ./gradlew bootRun
+
+# If you want to explicitly set the profile:
+# ./gradlew bootRun -Dspring.profiles.active=dev
 
 # Option B: If Gradle wrapper fails
 # Use Docker to build and run
