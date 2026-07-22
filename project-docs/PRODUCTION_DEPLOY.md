@@ -7,6 +7,7 @@ This guide summarizes steps to prepare and deploy the project to production. Man
 - Docker & Docker Compose
 - kubectl configured for target cluster
 - GitHub repository secrets set: `DOCKER_REGISTRY`, `DOCKER_USERNAME`, `DOCKER_PASSWORD`, `KUBECONFIG` (base64)
+  - For GitHub Container Registry (`ghcr.io`), the workflow can also use `username: ${{ github.actor }}` and `password: ${{ secrets.GITHUB_TOKEN }}` instead of `DOCKER_USERNAME` / `DOCKER_PASSWORD`.
 - Ensure `JWT_SECRET` and DB credentials are stored securely (Kubernetes Secrets or a secrets manager)
 
 2. Local build & tests
