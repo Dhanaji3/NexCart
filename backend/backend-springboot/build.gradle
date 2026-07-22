@@ -69,3 +69,7 @@ tasks.named('test') {
 task swaggerDocs {
     dependsOn bootRun
 }
+
+jar {
+    enabled = false
+}

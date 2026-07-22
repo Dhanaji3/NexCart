@@ -20,7 +20,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copy the built JAR from builder stage
-COPY --from=builder /app/build/libs/backend-springboot-1.0.0.jar app.jar
+COPY --from=builder /app/build/libs/*.jar /app/app.jar
 
 # Set environment variables
 ENV SPRING_PROFILES_ACTIVE=prod
