@@ -20,13 +20,24 @@ export const useOrdersStore = defineStore("orders", () => {
     () => orders.value.filter((order) => order.status === "pending").length,
   );
 
+  function cloneOrders(source: Order[]): Order[] {
+    return source.map((order) => ({
+      ...order,
+      items: order.items.map((item) => ({
+        ...item,
+        product: { ...item.product },
+      })),
+      shippingAddress: { ...order.shippingAddress },
+    }));
+  }
+
   async function fetchOrders(status?: OrderStatus) {
     loading.value = true;
     error.value = null;
 
     try {
       const result = await ordersApi.getAll(status);
-      orders.value = result;
+      orders.value = cloneOrders(result);
       return orders.value;
     } catch (err: any) {
       error.value = err.message || "Failed to load orders";
