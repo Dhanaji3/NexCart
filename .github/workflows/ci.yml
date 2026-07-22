@@ -97,6 +97,6 @@ jobs:
       - name: Build and push images
         run: |
           for app in host mfe-auth mfe-products mfe-cart mfe-checkout mfe-orders mfe-admin; do
-            docker build --build-arg APP_NAME=$app -t ghcr.io/${{ github.repository }}/$app:latest .
-            docker push ghcr.io/${{ github.repository }}/$app:latest
+            docker build --build-arg APP_NAME=$app -t ghcr.io/${{ toLower(github.repository) }}/$app:latest .
+            docker push ghcr.io/${{ toLower(github.repository) }}/$app:latest
           done
