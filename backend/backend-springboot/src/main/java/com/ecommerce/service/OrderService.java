@@ -4,6 +4,7 @@ import com.ecommerce.dto.AddressDTO;
 import com.ecommerce.dto.OrderCreateRequest;
 import com.ecommerce.dto.OrderDTO;
 import com.ecommerce.dto.OrderItemDTO;
+import com.ecommerce.dto.OrderItemRequest;
 import com.ecommerce.dto.ProductDTO;
 import com.ecommerce.model.*;
 import com.ecommerce.repository.OrderRepository;
@@ -40,14 +41,13 @@ public class OrderService {
         User user = userService.getUserById(userId);
         Cart cart = user.getCart();
         
-        if (cart == null || cart.getItems().isEmpty()) {
+        if ((cart == null || cart.getItems().isEmpty()) && (request.getItems() == null || request.getItems().isEmpty())) {
             throw new RuntimeException("Cart is empty");
         }
         
         Order order = new Order();
         order.setUser(user);
         order.setStatus(Order.OrderStatus.PENDING);
-        order.setTotalPrice(cart.getTotalPrice());
         order.setNotes(request.getNotes());
         order.setCreatedAt(LocalDateTime.now());
         order.setUpdatedAt(LocalDateTime.now());
@@ -58,25 +58,40 @@ public class OrderService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize shipping address", e);
         }
-        
-        // Copy cart items to order items
-        for (CartItem cartItem : cart.getItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setProduct(cartItem.getProduct());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getProduct().getPrice());
-            order.getItems().add(orderItem);
-            
-            // Reduce product stock
-            Product product = cartItem.getProduct();
-            product.setStock(product.getStock() - cartItem.getQuantity());
+
+        if (cart != null && !cart.getItems().isEmpty()) {
+            order.setTotalPrice(cart.getTotalPrice());
+            for (CartItem cartItem : cart.getItems()) {
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrder(order);
+                orderItem.setProduct(cartItem.getProduct());
+                orderItem.setQuantity(cartItem.getQuantity());
+                orderItem.setPrice(cartItem.getProduct().getPrice());
+                order.getItems().add(orderItem);
+
+                // Reduce product stock
+                Product product = cartItem.getProduct();
+                product.setStock(product.getStock() - cartItem.getQuantity());
+            }
+            order = orderRepository.save(order);
+            cartService.clearCart(userId);
+        } else {
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            for (OrderItemRequest itemRequest : request.getItems()) {
+                Product product = productService.getProductEntityById(itemRequest.getProductId());
+                OrderItem orderItem = new OrderItem();
+                orderItem.setOrder(order);
+                orderItem.setProduct(product);
+                orderItem.setQuantity(itemRequest.getQuantity());
+                orderItem.setPrice(product.getPrice());
+                order.getItems().add(orderItem);
+
+                totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity())));
+                product.setStock(product.getStock() - itemRequest.getQuantity());
+            }
+            order.setTotalPrice(totalPrice);
+            order = orderRepository.save(order);
         }
-        
-        order = orderRepository.save(order);
-        
-        // Clear the cart
-        cartService.clearCart(userId);
         
         return convertToDTO(order);
     }

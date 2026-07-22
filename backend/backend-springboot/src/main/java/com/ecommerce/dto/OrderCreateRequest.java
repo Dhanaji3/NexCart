@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,5 @@ public class OrderCreateRequest {
     private AddressDTO shippingAddress;
     private String paymentMethod;
     private String notes;
+    private List<OrderItemRequest> items;
 }
