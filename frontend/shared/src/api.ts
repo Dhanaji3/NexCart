@@ -1,5 +1,14 @@
 import axios from "axios";
-import type { Product, User } from "./types";
+import type {
+  Product,
+  User,
+  Order,
+  OrderCreateInput,
+  ProductCreateInput,
+  ProductUpdateInput,
+  Category,
+  OrderStatus,
+} from "./types";
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
@@ -151,5 +160,83 @@ export const wishlistApi = {
 
   async remove(productId: number): Promise<void> {
     await http.delete(`/api/wishlist/${productId}`);
+  },
+};
+export const ordersApi = {
+  async getAll(status?: OrderStatus): Promise<Order[]> {
+    const query = status ? `?status=${encodeURIComponent(status)}` : "";
+    const { data } = await http.get<Order[]>(`/api/orders${query}`);
+    return data;
+  },
+
+  async getById(orderId: string): Promise<Order> {
+    const { data } = await http.get<Order>(`/api/orders/${orderId}`);
+    return data;
+  },
+
+  async create(input: OrderCreateInput): Promise<Order> {
+    const { data } = await http.post<Order>("/api/orders", input);
+    return data;
+  },
+
+  async updateStatus(
+    orderId: string,
+    status: OrderStatus,
+    trackingNumber?: string,
+  ): Promise<Order> {
+    const { data } = await http.put<Order>(`/api/orders/${orderId}`, {
+      status,
+      trackingNumber,
+    });
+    return data;
+  },
+};
+
+export const productsApi = {
+  async getAll(params?: Record<string, unknown>): Promise<{
+    products: Product[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const { data } = await http.get<{
+      products: Product[];
+      total: number;
+      page: number;
+      totalPages: number;
+    }>("/api/products", { params });
+    return data;
+  },
+
+  async getById(productId: number): Promise<Product> {
+    const { data } = await http.get<Product>(`/api/products/${productId}`);
+    return data;
+  },
+
+  async create(input: ProductCreateInput): Promise<Product> {
+    const { data } = await http.post<Product>("/api/products", input);
+    return data;
+  },
+
+  async update(
+    productId: number,
+    updates: ProductUpdateInput,
+  ): Promise<Product> {
+    const { data } = await http.put<Product>(
+      `/api/products/${productId}`,
+      updates,
+    );
+    return data;
+  },
+
+  async delete(productId: number): Promise<void> {
+    await http.delete(`/api/products/${productId}`);
+  },
+};
+
+export const categoriesApi = {
+  async getAll(): Promise<Category[]> {
+    const { data } = await http.get<Category[]>("/api/categories");
+    return data;
   },
 };
