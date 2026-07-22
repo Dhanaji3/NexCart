@@ -42,133 +42,433 @@ function handleLogout() {
 if (!auth.isAuthenticated) {
   router.push("/login");
 }
+const memberSince = new Date().toLocaleDateString("en-US", {
+  month: "long",
+  year: "numeric",
+});
 </script>
 
 <template>
-  <div class="max-w-xl mx-auto">
-    <div v-if="auth.loading" class="text-center py-16 text-slate-500">
-      <div class="inline-flex items-center gap-3">
-        <span
-          class="w-5 h-5 border-2 border-slate-300 border-t-primary-500 rounded-full animate-spin"
-        />
-        <span>Loading profile...</span>
+  <div class="space-y-8">
+    <!-- ========================================= -->
+    <!-- HERO -->
+    <!-- ========================================= -->
+
+    <section
+      class="overflow-hidden rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 text-white shadow-xl"
+    >
+      <div
+        class="grid items-center gap-8 px-6 py-8 md:grid-cols-[2fr_1fr] lg:px-10"
+      >
+        <!-- Left -->
+
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+          <img
+            :src="auth.user?.avatar"
+            alt="Avatar"
+            class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-lg"
+          />
+
+          <div>
+            <span
+              class="rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em]"
+            >
+              My Account
+            </span>
+
+            <h1 class="mt-4 text-3xl font-bold md:text-4xl">
+              {{ auth.user?.name }}
+            </h1>
+
+            <p class="mt-2 text-slate-200">
+              {{ auth.user?.email }}
+            </p>
+
+            <div
+              class="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/20 px-4 py-2 text-sm"
+            >
+              ✔ Verified Member
+            </div>
+          </div>
+        </div>
+
+        <!-- Right -->
+
+        <div class="hidden rounded-3xl bg-white/10 p-6 backdrop-blur md:block">
+          <div class="grid grid-cols-2 gap-6 text-center">
+            <div>
+              <h3 class="text-3xl font-bold">
+                {{ auth.user?.role }}
+              </h3>
+
+              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
+                Role
+              </p>
+            </div>
+
+            <div>
+              <h3 class="text-3xl font-bold">
+                {{ memberSince }}
+              </h3>
+
+              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
+                Member Since
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div v-else-if="!auth.user" class="text-center py-16 text-slate-500">
-      No profile data available. Please log in again.
-    </div>
+    <!-- ========================================= -->
+    <!-- QUICK STATS -->
+    <!-- ========================================= -->
 
-    <div v-else>
-      <!-- Profile Header -->
-      <div class="flex items-center gap-6 mb-8">
-        <img
-          :src="auth.user.avatar"
-          alt="Avatar"
-          class="w-20 h-20 rounded-full border-3 border-emerald-500"
-        />
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 mb-1">
-            {{ auth.user.name }}
-          </h2>
-          <p
-            class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase"
-            :class="
-              auth.user.role === 'admin'
-                ? 'bg-amber-100 text-amber-800'
-                : 'bg-emerald-100 text-emerald-800'
-            "
+    <section class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-2xl bg-white p-6 shadow-card">
+        <div class="text-4xl">📦</div>
+
+        <h3 class="mt-4 text-2xl font-bold">15</h3>
+
+        <p class="text-slate-500">Orders</p>
+      </div>
+
+      <div class="rounded-2xl bg-white p-6 shadow-card">
+        <div class="text-4xl">❤️</div>
+
+        <h3 class="mt-4 text-2xl font-bold">8</h3>
+
+        <p class="text-slate-500">Wishlist</p>
+      </div>
+
+      <div class="rounded-2xl bg-white p-6 shadow-card">
+        <div class="text-4xl">⭐</div>
+
+        <h3 class="mt-4 text-2xl font-bold">Premium</h3>
+
+        <p class="text-slate-500">Membership</p>
+      </div>
+
+      <div class="rounded-2xl bg-white p-6 shadow-card">
+        <div class="text-4xl">🛡️</div>
+
+        <h3 class="mt-4 text-2xl font-bold">Active</h3>
+
+        <p class="text-slate-500">Status</p>
+      </div>
+    </section>
+
+    <section class="grid gap-8 lg:grid-cols-[2fr_1fr]">
+      <!-- ========================================= -->
+      <!-- PROFILE INFORMATION -->
+      <!-- ========================================= -->
+
+      <div class="rounded-3xl bg-white p-8 shadow-card">
+        <div class="mb-8 flex items-center justify-between">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">
+              Profile Information
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-500">
+              Manage your personal information.
+            </p>
+          </div>
+
+          <div class="flex gap-3">
+            <button
+              v-if="!isEditing"
+              @click="isEditing = true"
+              class="rounded-xl border border-primary-600 px-5 py-2 font-semibold text-primary-600 transition hover:bg-primary-600 hover:text-white"
+            >
+              ✏ Edit Profile
+            </button>
+
+            <template v-else>
+              <button
+                @click="isEditing = false"
+                class="rounded-xl border border-slate-300 px-5 py-2 font-semibold text-slate-700 transition hover:bg-slate-100"
+              >
+                Cancel
+              </button>
+
+              <button
+                @click="saveProfile"
+                :disabled="loading"
+                class="rounded-xl bg-primary-600 px-5 py-2 font-semibold text-white transition hover:bg-primary-700 disabled:opacity-50"
+              >
+                {{ loading ? "Saving..." : "Save Changes" }}
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- VIEW MODE -->
+        <!-- ========================================= -->
+
+        <div v-if="!isEditing" class="space-y-5">
+          <div
+            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
           >
-            {{ auth.user.role }}
-          </p>
+            <div>
+              <p class="text-sm text-slate-500">👤 Full Name</p>
+
+              <h4 class="mt-2 text-lg font-semibold text-slate-900">
+                {{ auth.user?.name }}
+              </h4>
+            </div>
+          </div>
+
+          <div
+            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+          >
+            <div>
+              <p class="text-sm text-slate-500">✉ Email Address</p>
+
+              <h4 class="mt-2 text-lg font-semibold text-slate-900">
+                {{ auth.user?.email }}
+              </h4>
+            </div>
+          </div>
+
+          <div
+            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+          >
+            <div>
+              <p class="text-sm text-slate-500">🛡 Account Role</p>
+
+              <span
+                class="mt-2 inline-flex rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700"
+              >
+                {{ auth.user?.role }}
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+          >
+            <div>
+              <p class="text-sm text-slate-500">📅 Member Since</p>
+
+              <h4 class="mt-2 text-lg font-semibold text-slate-900">
+                {{ memberSince }}
+              </h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- EDIT MODE -->
+        <!-- ========================================= -->
+
+        <div v-else class="space-y-6">
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-600">
+              Full Name
+            </label>
+
+            <input
+              v-model="editName"
+              type="text"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-primary-500 focus:bg-white"
+            />
+          </div>
+
+          <div>
+            <label class="mb-2 block text-sm font-medium text-slate-600">
+              Email Address
+            </label>
+
+            <input
+              v-model="editEmail"
+              type="email"
+              class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-primary-500 focus:bg-white"
+            />
+          </div>
         </div>
       </div>
 
-      <!-- Profile Card -->
-      <div class="card bg-white rounded-xl shadow-elevated p-6 mb-6">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-semibold text-slate-900">
-            Profile Information
+      <!-- ========================================= -->
+      <!-- ACCOUNT OVERVIEW -->
+      <!-- ========================================= -->
+
+      <aside class="space-y-6">
+        <div class="rounded-3xl bg-white p-6 shadow-card">
+          <h3 class="mb-5 text-xl font-bold text-slate-900">
+            Account Overview
           </h3>
-          <button
-            v-if="!isEditing"
-            @click="isEditing = true"
-            class="btn-outline"
-          >
-            Edit
-          </button>
-          <button
-            v-else
-            @click="saveProfile"
-            class="btn-primary"
-            :disabled="loading"
-          >
-            <span v-if="loading">Saving...</span>
-            <span v-else>Save</span>
-          </button>
-        </div>
 
-        <!-- View Mode -->
-        <div v-if="!isEditing" class="space-y-0">
-          <div
-            class="flex justify-between py-3 border-b border-slate-100 last:border-b-0"
-          >
-            <span class="text-sm text-slate-500">Name</span>
-            <span class="text-slate-700 font-medium">{{ auth.user.name }}</span>
-          </div>
-          <div
-            class="flex justify-between py-3 border-b border-slate-100 last:border-b-0"
-          >
-            <span class="text-sm text-slate-500">Email</span>
-            <span class="text-slate-700 font-medium">{{
-              auth.user.email
-            }}</span>
-          </div>
-          <div class="flex justify-between py-3">
-            <span class="text-sm text-slate-500">Member Since</span>
-            <span class="text-slate-700 font-medium">July 2026</span>
+          <div class="space-y-4">
+            <div class="flex justify-between">
+              <span class="text-slate-500"> Status </span>
+
+              <span class="font-semibold text-green-600"> Active </span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-slate-500"> Member Since </span>
+
+              <span class="font-semibold">
+                {{ memberSince }}
+              </span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-slate-500"> Role </span>
+
+              <span class="capitalize font-semibold">
+                {{ auth.user?.role }}
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- Edit Mode -->
-        <div v-else class="space-y-4">
-          <div>
-            <label class="block text-sm text-slate-600 mb-1">Name</label>
-            <input v-model="editName" type="text" class="input" />
-          </div>
-          <div>
-            <label class="block text-sm text-slate-600 mb-1">Email</label>
-            <input v-model="editEmail" type="email" class="input" />
+        <!-- ========================================= -->
+        <!-- QUICK ACTIONS -->
+        <!-- ========================================= -->
+
+        <div class="rounded-3xl bg-white p-6 shadow-card">
+          <h3 class="mb-5 text-xl font-bold text-slate-900">Quick Actions</h3>
+
+          <div class="grid gap-4">
+            <!-- Orders -->
+
+            <RouterLink
+              to="/orders"
+              class="group flex items-center justify-between rounded-2xl border border-slate-200 p-4 no-underline transition hover:border-primary-500 hover:bg-primary-50"
+            >
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-2xl"
+                >
+                  📦
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-slate-900">My Orders</h4>
+
+                  <p class="text-sm text-slate-500">View your order history</p>
+                </div>
+              </div>
+
+              <span
+                class="text-xl text-slate-400 transition group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </RouterLink>
+
+            <!-- Wishlist -->
+
+            <RouterLink
+              to="/wishlist"
+              class="group flex items-center justify-between rounded-2xl border border-slate-200 p-4 no-underline transition hover:border-pink-500 hover:bg-pink-50"
+            >
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-100 text-2xl"
+                >
+                  ❤️
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-slate-900">Wishlist</h4>
+
+                  <p class="text-sm text-slate-500">Your saved products</p>
+                </div>
+              </div>
+
+              <span
+                class="text-xl text-slate-400 transition group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </RouterLink>
+
+            <!-- Logout -->
+
+            <button
+              @click="handleLogout"
+              class="group flex w-full items-center justify-between rounded-2xl border border-red-200 p-4 text-left transition hover:bg-red-50"
+            >
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-2xl"
+                >
+                  🚪
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-slate-900">Logout</h4>
+
+                  <p class="text-sm text-slate-500">
+                    Sign out from your account
+                  </p>
+                </div>
+              </div>
+
+              <span
+                class="text-xl text-red-400 transition group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </button>
           </div>
         </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="grid grid-cols-3 gap-4">
-        <RouterLink
-          to="/orders"
-          class="flex flex-col items-center gap-2 p-6 bg-white rounded-lg shadow-sm text-slate-700 font-medium text-sm no-underline hover:-translate-y-0.5 transition-transform"
-        >
-          <span class="text-2xl">📦</span>
-          <span>My Orders</span>
-        </RouterLink>
-        <RouterLink
-          to="/wishlist"
-          class="flex flex-col items-center gap-2 p-6 bg-white rounded-lg shadow-sm text-slate-700 font-medium text-sm no-underline hover:-translate-y-0.5 transition-transform"
-        >
-          <span class="text-2xl">❤️</span>
-          <span>Wishlist</span>
-        </RouterLink>
-        <button
-          @click="handleLogout"
-          class="flex flex-col items-center gap-2 p-6 bg-white rounded-lg shadow-sm text-slate-700 font-medium text-sm border-none cursor-pointer hover:-translate-y-0.5 hover:text-rose-500 transition-transform"
-        >
-          <span class="text-2xl">🚪</span>
-          <span>Logout</span>
-        </button>
-      </div>
-    </div>
+      </aside>
+    </section>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.shadow-card {
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.06),
+    0 4px 10px rgba(15, 23, 42, 0.04);
+}
+
+button,
+a,
+input {
+  transition: all 0.25s ease;
+}
+
+input:focus {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+img {
+  user-select: none;
+  transition: transform 0.35s ease;
+}
+
+img:hover {
+  transform: scale(1.05);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+section,
+aside,
+.shadow-card {
+  animation: fadeUp 0.45s ease forwards;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+}
+</style>
