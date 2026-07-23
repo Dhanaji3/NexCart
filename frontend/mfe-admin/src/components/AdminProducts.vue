@@ -361,7 +361,7 @@ async function saveProduct() {
 
                 <td class="px-6 py-5">
                   <span class="text-lg font-bold text-primary-700">
-                    ${{ product.price.toFixed(2) }}
+                    ₹{{ product.price.toFixed(2) }}
                   </span>
                 </td>
 
@@ -458,7 +458,7 @@ async function saveProduct() {
 
               <div class="mt-3 flex items-center justify-between">
                 <span class="text-xl font-bold text-primary-700">
-                  ${{ product.price.toFixed(2) }}
+                  ₹{{ product.price.toFixed(2) }}
                 </span>
 
                 <span
