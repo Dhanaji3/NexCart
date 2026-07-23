@@ -3,6 +3,9 @@ import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { useHomeApi } from "../composables";
 import { useCartStore } from "shared";
 import type { Product } from "shared";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const { featuredProducts, categories, loading, fetchHome } = useHomeApi();
 
@@ -77,6 +80,17 @@ const resumeHero = () => startCarousel();
 function addToCart(product: Product) {
   cart.addToCart(product);
 }
+
+const buyNow = (product: Product) => {
+  if (!product.inStock) return;
+
+  // Don't add duplicate items
+  if (!cart.isInCart(product.id)) {
+    cart.addToCart(product);
+  }
+
+  router.push("/checkout");
+};
 
 onMounted(async () => {
   await fetchHome();
@@ -457,7 +471,7 @@ onBeforeUnmount(() => {
 
             <!-- Buttons -->
 
-            <div class="mt-5 grid grid-cols-2 gap-3">
+            <!-- <div class="mt-5 grid grid-cols-2 gap-3">
               <button
                 @click="addToCart(product)"
                 :disabled="!product.inStock"
@@ -478,6 +492,42 @@ onBeforeUnmount(() => {
               >
                 View
               </RouterLink>
+            </div> -->
+            <div class="mt-5 space-y-3">
+              <!-- Buy Now -->
+
+              <button
+                @click="buyNow(product)"
+                :disabled="!product.inStock"
+                class="w-full rounded-lg bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:bg-gray-300"
+              >
+                ⚡ Buy Now
+              </button>
+
+              <!-- Bottom Buttons -->
+
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  @click="addToCart(product)"
+                  :disabled="!product.inStock"
+                  class="rounded-lg bg-accent-600 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-700"
+                >
+                  {{
+                    cart.isInCart(product.id)
+                      ? "✓ In Cart"
+                      : product.inStock
+                        ? "Add to Cart"
+                        : "Sold Out"
+                  }}
+                </button>
+
+                <RouterLink
+                  :to="`/products/${product.id}`"
+                  class="rounded-lg border border-slate-300 py-2.5 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-accent-600 hover:text-accent-600"
+                >
+                  View Details
+                </RouterLink>
+              </div>
             </div>
           </div>
         </article>

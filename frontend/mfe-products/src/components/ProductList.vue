@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { RouterLink } from "vue-router";
-import { useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useCartStore } from "shared";
 import type { Product } from "shared";
 
 import { useProductsApi, useCategoriesApi } from "../composables";
 
 const route = useRoute();
+const router = useRouter();
 const cart = useCartStore();
 
 const { products, loading, error, getAll: fetchProductsApi } = useProductsApi();
@@ -67,6 +67,18 @@ function resetFilters() {
   sortBy.value = "rating";
 
   fetchProducts();
+}
+
+function buyNow(product: Product) {
+  if (!product.inStock) return;
+
+  // Avoid duplicate products in cart
+  if (!cart.isInCart(product.id)) {
+    cart.addToCart(product);
+  }
+
+  // Go directly to checkout
+  router.push("/checkout");
 }
 </script>
 
@@ -405,27 +417,41 @@ function resetFilters() {
 
           <!-- ACTIONS -->
 
-          <div class="mt-6 grid grid-cols-2 gap-3">
+          <div class="mt-6 space-y-3">
+            <!-- Buy Now -->
+
             <button
-              @click="addToCart(product)"
+              @click="buyNow(product)"
               :disabled="!product.inStock"
-              class="rounded-xl bg-accent-600 py-3 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+              class="w-full rounded-xl bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
-              {{
-                cart.isInCart(product.id)
-                  ? "✓ In Cart"
-                  : product.inStock
-                    ? "Add to Cart"
-                    : "Sold Out"
-              }}
+              ⚡ Buy Now
             </button>
 
-            <RouterLink
-              :to="`/products/${product.id}`"
-              class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-primary-600 hover:text-primary-600"
-            >
-              View Details
-            </RouterLink>
+            <!-- Bottom Buttons -->
+
+            <div class="grid grid-cols-2 gap-3">
+              <button
+                @click="addToCart(product)"
+                :disabled="!product.inStock"
+                class="rounded-xl bg-accent-600 py-3 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+              >
+                {{
+                  cart.isInCart(product.id)
+                    ? "✓ In Cart"
+                    : product.inStock
+                      ? "Add to Cart"
+                      : "Sold Out"
+                }}
+              </button>
+
+              <RouterLink
+                :to="`/products/${product.id}`"
+                class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-primary-600 hover:text-primary-600"
+              >
+                View Details
+              </RouterLink>
+            </div>
           </div>
         </div>
       </article>
