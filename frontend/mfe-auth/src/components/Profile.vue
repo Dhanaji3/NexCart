@@ -124,7 +124,7 @@ const memberSince = new Date().toLocaleDateString("en-US", {
     <!-- QUICK STATS -->
     <!-- ========================================= -->
 
-    <section class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- <section class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       <div class="rounded-2xl bg-white p-6 shadow-card">
         <div class="text-4xl">📦</div>
 
@@ -156,7 +156,7 @@ const memberSince = new Date().toLocaleDateString("en-US", {
 
         <p class="text-slate-500">Status</p>
       </div>
-    </section>
+    </section> -->
 
     <section class="grid gap-8 lg:grid-cols-[2fr_1fr]">
       <!-- ========================================= -->

@@ -446,11 +446,11 @@ onBeforeUnmount(() => {
             <div class="mt-4 flex items-end justify-between">
               <div>
                 <span class="text-2xl font-bold text-accent-600">
-                  ${{ product.price.toFixed(2) }}
+                  ₹{{ product.price.toFixed(2) }}
                 </span>
 
                 <p class="text-xs text-slate-400 line-through">
-                  ${{ (product.price * 1.2).toFixed(2) }}
+                  ₹{{ (product.price * 1.2).toFixed(2) }}
                 </p>
               </div>
             </div>
