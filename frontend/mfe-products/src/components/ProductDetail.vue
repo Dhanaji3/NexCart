@@ -110,7 +110,7 @@ function buyNow() {
 
       <!-- Info -->
       <div class="flex flex-col gap-4">
-        <span class="badge bg-primary-100 text-primary-700">{{
+        <span class="badge bg-primary-100 text-primary-700 py-3">{{
           product.category
         }}</span>
         <h1 class="text-3xl font-bold text-slate-900">{{ product.name }}</h1>
@@ -151,7 +151,7 @@ function buyNow() {
           <button
             @click="buyNow"
             :disabled="!product.inStock"
-            class="bg-orange-500 font-semibold text-white transition hover:bg-orange-600 disabled:bg-gray-300"
+            class="btn bg-orange-500 font-semibold text-white transition hover:bg-orange-600 disabled:bg-gray-300"
           >
             ⚡Buy Now
           </button>

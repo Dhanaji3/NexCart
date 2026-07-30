@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
 
               <div class="mt-7 flex flex-wrap gap-3">
                 <RouterLink
-                  :to="`/products/₹{heroSlides[activeSlide].id}`"
+                  :to="`/products/${heroSlides[activeSlide].id}`"
                   class="rounded-lg bg-accent-500 px-6 py-3 text-sm font-semibold text-white no-underline transition hover:bg-accent-600"
                 >
                   Buy Now
