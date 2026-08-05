@@ -1,38 +1,49 @@
 /**
- * Format a number as currency (USD by default)
+ * Format a number as currency (INR by default)
  */
-export function formatCurrency(amount: number, currency = 'USD', locale = 'en-US'): string {
+export function formatCurrency(
+  amount: number,
+  currency = "INR",
+  locale = "en-IN",
+): string {
   return new Intl.NumberFormat(locale, {
-    style: 'currency',
+    style: "currency",
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount)
+  }).format(amount);
 }
 
 /**
  * Format a number as a compact currency string (e.g., $1.2K, $3.4M)
  */
-export function formatCompactCurrency(amount: number, currency = 'USD', locale = 'en-US'): string {
+export function formatCompactCurrency(
+  amount: number,
+  currency = "INR",
+  locale = "en-IN",
+): string {
   return new Intl.NumberFormat(locale, {
-    style: 'currency',
+    style: "currency",
     currency,
-    notation: 'compact',
+    notation: "compact",
     maximumFractionDigits: 1,
-  }).format(amount)
+  }).format(amount);
 }
 
 /**
  * Calculate discount percentage
  */
-export function calculateDiscount(originalPrice: number, discountedPrice: number): number {
-  if (originalPrice <= 0) return 0
-  return Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
+export function calculateDiscount(
+  originalPrice: number,
+  discountedPrice: number,
+): number {
+  if (originalPrice <= 0) return 0;
+  return Math.round(((originalPrice - discountedPrice) / originalPrice) * 100);
 }
 
 /**
  * Calculate tax amount
  */
 export function calculateTax(subtotal: number, taxRate = 0.08): number {
-  return Math.round(subtotal * taxRate * 100) / 100
+  return Math.round(subtotal * taxRate * 100) / 100;
 }

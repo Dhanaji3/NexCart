@@ -48,6 +48,16 @@ function statusClass(status: string) {
       return "bg-slate-100 text-slate-700";
   }
 }
+
+function formatPrice(value: number | string) {
+  const amount = Number(value) || 0;
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
 </script>
 
 <template>
@@ -115,7 +125,7 @@ function statusClass(status: string) {
             </div>
 
             <div class="col-span-2">
-              <h3 class="text-3xl font-bold">₹{{ totalSpent.toFixed(2) }}</h3>
+              <h3 class="text-3xl font-bold">{{ formatPrice(totalSpent) }}</h3>
 
               <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
                 Total Spent
@@ -250,7 +260,7 @@ function statusClass(status: string) {
                 </p>
 
                 <h3 class="text-2xl font-bold text-primary-700">
-                  ₹{{ Number(order.total ?? 0).toFixed(2) }}
+                  {{ formatPrice(order.total) }}
                 </h3>
               </div>
             </div>
@@ -292,7 +302,7 @@ function statusClass(status: string) {
               <p class="mt-1 text-sm text-slate-500">
                 Unit Price :
                 <span class="font-semibold">
-                  ₹{{ item.product.price.toFixed(2) }}
+                  {{ formatPrice(item.product.price) }}
                 </span>
               </p>
             </div>
@@ -305,7 +315,7 @@ function statusClass(status: string) {
               </p>
 
               <h4 class="mt-1 text-xl font-bold text-slate-900">
-                ₹{{ (item.product.price * item.quantity).toFixed(2) }}
+                {{ formatPrice(item.product.price * item.quantity) }}
               </h4>
             </div>
           </div>

@@ -379,7 +379,7 @@ const deliveredOrders = computed(
 
                 <td class="px-6 py-5">
                   <span class="text-lg font-bold text-emerald-600">
-                    ₹{{ order.total.toLocaleString() }}
+                    {{ formatCurrency(order.total) }}
                   </span>
                 </td>
 
@@ -506,7 +506,7 @@ const deliveredOrders = computed(
                 </p>
 
                 <h4 class="mt-1 text-lg font-bold text-emerald-600">
-                  ₹{{ order.total.toLocaleString() }}
+                  {{ formatCurrency(order.total) }}
                 </h4>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useCartStore } from "shared";
 import type { Product } from "shared";
 import { useProductsApi } from "../composables";
+import { formatCurrency } from "shared";
 
 const route = useRoute();
 const router = useRouter();
@@ -98,8 +99,7 @@ function buyNow() {
       ← Back to Products
     </button>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-      <!-- Image -->
+    <div class="grid md:grid-cols-2 gap-8 items-start">
       <div>
         <img
           :src="product.image"
@@ -116,7 +116,8 @@ function buyNow() {
         <h1 class="text-3xl font-bold text-slate-900">{{ product.name }}</h1>
 
         <div class="flex items-center gap-2 text-sm">
-          <span class="font-medium text-slate-800"
+          <span
+            class="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-700"
             >⭐ {{ product.rating }}</span
           >
           <span class="text-slate-500">({{ product.reviews }} reviews)</span>
@@ -124,7 +125,7 @@ function buyNow() {
         </div>
 
         <div class="text-3xl font-bold text-slate-900">
-          ₹{{ product.price.toFixed(2) }}
+          {{ formatCurrency(product.price) }}
         </div>
 
         <p class="text-slate-600 leading-relaxed">{{ product.description }}</p>
@@ -151,7 +152,7 @@ function buyNow() {
           <button
             @click="buyNow"
             :disabled="!product.inStock"
-            class="btn bg-orange-500 font-semibold text-white transition hover:bg-orange-600 disabled:bg-gray-300"
+            class="btn-accent"
           >
             ⚡Buy Now
           </button>
@@ -191,9 +192,9 @@ function buyNow() {
           />
           <div class="p-3 flex flex-col gap-1">
             <span class="text-sm text-slate-700 truncate">{{ rp.name }}</span>
-            <span class="font-bold text-accent-600"
-              >₹{{ rp.price.toFixed(2) }}</span
-            >
+            <span class="font-bold text-accent-600">{{
+              formatCurrency(rp.price)
+            }}</span>
           </div>
         </RouterLink>
       </div>

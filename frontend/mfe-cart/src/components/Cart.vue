@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCartStore } from "shared";
+import { formatCurrency } from "shared";
 
 const cart = useCartStore();
 </script>
@@ -41,9 +42,9 @@ const cart = useCartStore();
             <span class="text-xs text-slate-400 capitalize">{{
               item.product.category
             }}</span>
-            <span class="text-sm text-slate-500"
-              >₹{{ item.product.price.toFixed(2) }}</span
-            >
+            <span class="text-sm text-slate-500">{{
+              formatCurrency(item.product.price)
+            }}</span>
           </div>
           <div class="flex items-center gap-2">
             <button
@@ -63,7 +64,7 @@ const cart = useCartStore();
             </button>
           </div>
           <div class="font-bold text-slate-900 min-w-[5rem] text-right">
-            ₹{{ (item.product.price * item.quantity).toFixed(2) }}
+            {{ formatCurrency(item.product.price * item.quantity) }}
           </div>
           <button
             @click="cart.removeFromCart(item.product.id)"
@@ -80,7 +81,7 @@ const cart = useCartStore();
           <div class="space-y-3">
             <div class="flex justify-between text-slate-600 text-sm">
               <span>Subtotal ({{ cart.totalItems }} items)</span>
-              <span>₹{{ cart.totalPrice.toFixed(2) }}</span>
+              <span>{{ formatCurrency(cart.totalPrice) }}</span>
             </div>
             <div class="flex justify-between text-slate-600 text-sm">
               <span>Shipping</span>
@@ -90,7 +91,7 @@ const cart = useCartStore();
                 "
               >
                 {{
-                  cart.shipping === 0 ? "FREE" : `₹${cart.shipping.toFixed(2)}`
+                  cart.shipping === 0 ? "FREE" : formatCurrency(cart.shipping)
                 }}
               </span>
             </div>
@@ -98,7 +99,7 @@ const cart = useCartStore();
               class="flex justify-between border-t border-slate-200 pt-4 mt-2 font-bold text-lg text-slate-900"
             >
               <span>Total</span>
-              <span>₹{{ cart.grandTotal.toFixed(2) }}</span>
+              <span>{{ formatCurrency(cart.grandTotal) }}</span>
             </div>
           </div>
           <RouterLink

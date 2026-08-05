@@ -4,6 +4,7 @@ import { useHomeApi } from "../composables";
 import { useCartStore } from "shared";
 import type { Product } from "shared";
 import { useRouter } from "vue-router";
+import { formatCurrency } from "shared";
 
 const router = useRouter();
 
@@ -116,16 +117,15 @@ onBeforeUnmount(() => {
 
       <div
         class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-accent-500/10 blur-3xl"
-      />
+      ></div>
 
       <div
         class="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-primary-400/10 blur-3xl"
-      />
+      ></div>
 
-      <div
-        v-if="heroSlides.length"
-        class="relative min-h-[260px] md:min-h-[340px] lg:min-h-[390px]"
-      >
+      <!-- HERO -->
+
+      <div v-if="heroSlides.length" class="relative min-h-[340px]">
         <Transition name="fade" mode="out-in">
           <div
             :key="heroSlides[activeSlide].id"
@@ -154,12 +154,12 @@ onBeforeUnmount(() => {
               </p>
 
               <div class="mt-7 flex flex-wrap gap-3">
-                <RouterLink
-                  :to="`/products/${heroSlides[activeSlide].id}`"
-                  class="rounded-lg bg-accent-500 px-6 py-3 text-sm font-semibold text-white no-underline transition hover:bg-accent-600"
+                <button
+                  @click="buyNow(heroSlides[activeSlide])"
+                  class="btn-accent"
                 >
                   Buy Now
-                </RouterLink>
+                </button>
 
                 <RouterLink
                   to="/products"
@@ -207,15 +207,17 @@ onBeforeUnmount(() => {
             v-for="(slide, index) in heroSlides"
             :key="slide.id"
             @click="goToSlide(index)"
-            class="h-2 rounded-full transition-all duration-300"
+            class="h-2 rounded-full transition-all"
             :class="activeSlide === index ? 'w-8 bg-white' : 'w-2 bg-white/40'"
           />
         </div>
       </div>
 
+      <!-- EMPTY -->
+
       <div
         v-else
-        class="flex min-h-[320px] flex-col items-center justify-center text-center"
+        class="flex min-h-[340px] flex-col items-center justify-center text-center"
       >
         <h1 class="text-4xl font-bold text-white">Welcome to NexCart</h1>
 
@@ -265,10 +267,9 @@ onBeforeUnmount(() => {
           class="group relative overflow-hidden rounded-2xl bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl no-underline"
         >
           <!-- Hover Background -->
-
           <div
             class="absolute inset-0 bg-gradient-to-br from-primary-50 to-accent-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          />
+          ></div>
 
           <div class="relative z-10 flex flex-col items-center">
             <!-- Icon -->
@@ -418,9 +419,12 @@ onBeforeUnmount(() => {
             <!-- Wishlist -->
 
             <button
-              class="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow transition hover:bg-red-500 hover:text-white"
+              @click.stop="cart.toggleWishlist(product)"
+              class="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow transition hover:bg-rose-500 hover:text-white"
+              :aria-pressed="cart.isInWishlist(product.id)"
             >
-              ♡
+              <span v-if="cart.isInWishlist(product.id)">❤️</span>
+              <span v-else>♡</span>
             </button>
 
             <!-- Image -->
@@ -460,11 +464,11 @@ onBeforeUnmount(() => {
             <div class="mt-4 flex items-end justify-between">
               <div>
                 <span class="text-2xl font-bold text-accent-600">
-                  ₹{{ product.price.toFixed(2) }}
+                  {{ formatCurrency(product.price) }}
                 </span>
 
                 <p class="text-xs text-slate-400 line-through">
-                  ₹{{ (product.price * 1.2).toFixed(2) }}
+                  {{ formatCurrency(product.price * 1.2) }}
                 </p>
               </div>
             </div>

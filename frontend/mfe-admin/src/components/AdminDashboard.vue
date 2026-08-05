@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import type { AdminStats } from "shared";
 import { useAdminStatsApi } from "../composables";
+import { formatCurrency } from "shared";
 
 const { stats, loading, error, fetchStats } = useAdminStatsApi();
 

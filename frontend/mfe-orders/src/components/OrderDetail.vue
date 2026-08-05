@@ -2,6 +2,7 @@
 import { onMounted, computed } from "vue";
 import { useRoute, useRouter, RouterLink } from "vue-router";
 import { useOrdersApi } from "../composables";
+import { formatCurrency } from "shared";
 
 const route = useRoute();
 const router = useRouter();
@@ -172,7 +173,7 @@ function badgeClass(status: string) {
               <p class="text-sm text-slate-300">Order Total</p>
 
               <h2 class="mt-2 text-4xl font-bold">
-                ₹{{ Number(order.total ?? 0).toFixed(2) }}
+                {{ formatCurrency(Number(order.total ?? 0)) }}
               </h2>
             </div>
           </div>
@@ -324,7 +325,7 @@ function badgeClass(status: string) {
 
                 <p class="mt-2 text-slate-500">
                   Unit Price :
-                  <strong> ₹{{ item.product.price.toFixed(2) }} </strong>
+                  <strong> {{ formatCurrency(item.product.price) }} </strong>
                 </p>
               </div>
 
@@ -334,7 +335,7 @@ function badgeClass(status: string) {
                 </p>
 
                 <h3 class="mt-2 text-2xl font-bold text-primary-700">
-                  ₹{{ (item.product.price * item.quantity).toFixed(2) }}
+                  {{ formatCurrency(item.product.price * item.quantity) }}
                 </h3>
               </div>
             </article>
@@ -422,7 +423,7 @@ function badgeClass(status: string) {
                 <span class="text-slate-500"> Subtotal </span>
 
                 <span class="font-medium">
-                  ₹{{ Number(order.total).toFixed(2) }}
+                  {{ formatCurrency(Number(order.total)) }}
                 </span>
               </div>
 
@@ -442,7 +443,7 @@ function badgeClass(status: string) {
                 <span class="text-lg font-bold text-slate-900"> Total </span>
 
                 <span class="text-2xl font-bold text-primary-700">
-                  ₹{{ Number(order.total).toFixed(2) }}
+                  {{ formatCurrency(Number(order.total)) }}
                 </span>
               </div>
             </div>

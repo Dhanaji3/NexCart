@@ -5,6 +5,7 @@ import { useCartStore } from "shared";
 import type { Product } from "shared";
 
 import { useProductsApi, useCategoriesApi } from "../composables";
+import { formatCurrency } from "shared";
 
 const route = useRoute();
 const router = useRouter();
@@ -392,11 +393,11 @@ function buyNow(product: Product) {
           <div class="mt-5 flex items-end justify-between">
             <div>
               <div class="text-2xl font-bold text-primary-700">
-                ₹{{ product.price.toLocaleString() }}
+                {{ formatCurrency(product.price) }}
               </div>
 
               <div class="text-sm text-slate-400 line-through">
-                ₹{{ Math.round(product.price * 1.18).toLocaleString() }}
+                {{ formatCurrency(Math.round(product.price * 1.18)) }}
               </div>
             </div>
 
@@ -423,7 +424,7 @@ function buyNow(product: Product) {
             <button
               @click="buyNow(product)"
               :disabled="!product.inStock"
-              class="w-full rounded-xl bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-slate-300"
+              class="btn-accent w-full disabled:cursor-not-allowed disabled:bg-slate-300"
             >
               ⚡ Buy Now
             </button>
@@ -434,7 +435,7 @@ function buyNow(product: Product) {
               <button
                 @click="addToCart(product)"
                 :disabled="!product.inStock"
-                class="rounded-xl bg-accent-600 py-3 text-sm font-semibold text-white transition hover:bg-accent-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                class="btn-accent disabled:cursor-not-allowed disabled:bg-slate-300"
               >
                 {{
                   cart.isInCart(product.id)

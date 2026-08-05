@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCartStore } from "shared";
+import { formatCurrency } from "shared";
 
 const cart = useCartStore();
 </script>
@@ -48,7 +49,7 @@ const cart = useCartStore();
             {{ product.name }}
           </RouterLink>
           <div class="text-xl font-bold text-emerald-600 mb-1">
-            ₹{{ product.price.toFixed(2) }}
+            {{ formatCurrency(product.price) }}
           </div>
           <div
             class="text-xs mb-3"

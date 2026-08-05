@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import { useCartStore } from "shared";
 import { useRouter } from "vue-router";
+import { formatCurrency } from "shared";
 import type { Address } from "shared";
 import { useCheckoutApi } from "../composables";
 
@@ -416,9 +417,9 @@ function goToOrders() {
                 class="flex justify-between py-1 text-sm text-slate-600"
               >
                 <span>{{ item.product.name }} × {{ item.quantity }}</span>
-                <span
-                  >₹{{ (item.product.price * item.quantity).toFixed(2) }}</span
-                >
+                <span>{{
+                  formatCurrency(item.product.price * item.quantity)
+                }}</span>
               </div>
             </div>
             <div class="flex justify-between mt-6">
@@ -466,19 +467,19 @@ function goToOrders() {
           <div class="space-y-2">
             <div class="flex justify-between text-sm text-slate-500">
               <span>Subtotal</span>
-              <span>₹{{ cart.totalPrice.toFixed(2) }}</span>
+              <span>{{ formatCurrency(cart.totalPrice) }}</span>
             </div>
             <div class="flex justify-between text-sm text-slate-500">
               <span>Shipping</span>
               <span>{{
-                cart.shipping === 0 ? "FREE" : `₹${cart.shipping.toFixed(2)}`
+                cart.shipping === 0 ? "FREE" : formatCurrency(cart.shipping)
               }}</span>
             </div>
             <div
               class="flex justify-between pt-3 mt-2 border-t-2 border-slate-200 text-lg font-bold text-slate-900"
             >
               <span>Total</span>
-              <span>₹{{ cart.grandTotal.toFixed(2) }}</span>
+              <span>{{ formatCurrency(cart.grandTotal) }}</span>
             </div>
           </div>
         </div>
