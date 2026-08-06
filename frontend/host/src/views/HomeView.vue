@@ -137,7 +137,7 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-  <div class="flex flex-col gap-12">
+  <div class="flex flex-col gap-6">
     <!-- ===================================================== -->
     <!-- HERO -->
     <!-- ===================================================== -->
@@ -153,17 +153,17 @@ onBeforeUnmount(() => {
       <!-- Background Blur -->
 
       <div
-        class="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-cyan-400/20 blur-[120px]"
+        class="absolute -right-28 -top-28 h-64 w-64 rounded-full bg-cyan-400/20 blur-[100px]"
       />
 
       <div
-        class="absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-primary-500/20 blur-[100px]"
+        class="absolute -left-20 bottom-0 h-60 w-60 rounded-full bg-primary-500/20 blur-[80px]"
       />
 
       <Transition name="fade" mode="out-in">
         <div
           :key="heroSlides[activeSlide].id"
-          class="grid min-h-[380px] items-center gap-6 px-4 py-8 sm:px-6 lg:min-h-[420px] lg:grid-cols-[1fr_1fr] lg:px-12"
+          class="grid min-h-[220px] items-center gap-3 px-4 py-4 sm:px-6 lg:min-h-[250px] lg:grid-cols-[1fr_1fr] lg:px-10"
         >
           <!-- ================================================= -->
           <!-- LEFT -->
@@ -181,22 +181,22 @@ onBeforeUnmount(() => {
             <!-- Title -->
 
             <h1
-              class="mt-5 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-6xl"
+              class="mt-4 text-2xl font-black leading-tight tracking-tight text-white sm:text-2xl lg:text-[2.2rem]"
             >
               {{ heroSlides[activeSlide].name }}
             </h1>
 
             <!-- Description -->
 
-            <p class="mt-4 max-w-lg text-base leading-7 text-slate-300">
+            <p class="mt-3 max-w-lg text-sm leading-6 text-slate-300">
               Premium quality products crafted for modern lifestyles. Enjoy
               secure checkout, lightning-fast delivery and trusted support.
             </p>
 
             <!-- Price -->
 
-            <div class="mt-6 flex items-center gap-4">
-              <span class="text-4xl font-black text-white">
+            <div class="mt-4 flex items-center gap-3">
+              <span class="text-2xl font-black text-white">
                 {{ formatCurrency(heroSlides[activeSlide].price) }}
               </span>
 
@@ -209,9 +209,9 @@ onBeforeUnmount(() => {
 
             <!-- Features -->
 
-            <div class="mt-6 flex flex-wrap gap-3">
+            <div class="mt-4 flex flex-wrap gap-2">
               <div
-                class="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur"
+                class="rounded-full bg-white/10 px-3 py-1.5 text-xs text-white backdrop-blur"
               >
                 🚚 Free Delivery
               </div>
@@ -231,17 +231,17 @@ onBeforeUnmount(() => {
 
             <!-- Buttons -->
 
-            <div class="mt-7 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+            <div class="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <button
                 @click="buyNow(heroSlides[activeSlide])"
-                class="w-full rounded-xl bg-cyan-500 px-7 py-3 font-semibold text-white transition hover:scale-105 hover:bg-cyan-400 sm:w-auto"
+                class="w-full rounded-xl bg-cyan-500 px-5 py-2 font-semibold text-white transition hover:scale-105 hover:bg-cyan-400 sm:w-auto"
               >
                 Buy Now
               </button>
 
               <RouterLink
                 to="/products"
-                class="w-full rounded-xl border border-white/20 px-7 py-3 font-semibold text-white no-underline transition hover:bg-white/10 sm:w-auto"
+                class="w-full rounded-xl border border-white/20 px-5 py-2 font-semibold text-white no-underline transition hover:bg-white/10 sm:w-auto"
               >
                 Explore Products
               </RouterLink>
@@ -264,10 +264,8 @@ onBeforeUnmount(() => {
             <img
               :src="heroSlides[activeSlide].image"
               :alt="heroSlides[activeSlide].name"
-              class="relative z-10 h-[240px] object-contain transition duration-500 hover:scale-105 md:h-[300px] lg:h-[360px]"
+              class="relative z-10 h-[160px] object-contain transition duration-500 hover:scale-105 md:h-[190px] lg:h-[210px]"
             />
-
-            <!-- Floating Rating Card -->
             <!-- 
             <div
               class="absolute bottom-4 right-4 hidden rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-xl xl:block"
@@ -365,16 +363,16 @@ onBeforeUnmount(() => {
       v-else
       class="flex min-h-[380px] flex-col items-center justify-center rounded-[28px] bg-gradient-to-br from-slate-950 via-primary-900 to-primary-700 px-6 text-center"
     >
-      <h1 class="text-4xl font-black text-white">Welcome to NexCart</h1>
+      <h1 class="text-3xl font-black text-white">Welcome to NexCart</h1>
 
-      <p class="mt-4 max-w-lg text-slate-300">
+      <p class="mt-3 max-w-lg text-slate-300">
         Discover premium products with secure checkout, fast delivery and
         amazing offers.
       </p>
 
       <RouterLink
         to="/products"
-        class="mt-8 rounded-xl bg-cyan-500 px-7 py-3 font-semibold text-white no-underline transition hover:bg-cyan-400"
+        class="mt-6 rounded-xl bg-cyan-500 px-7 py-3 font-semibold text-white no-underline transition hover:bg-cyan-400"
       >
         Explore Products
       </RouterLink>
@@ -384,9 +382,9 @@ onBeforeUnmount(() => {
     <!-- CATEGORIES -->
     <!-- ===================================================== -->
 
-    <section class="py-16">
+    <section class="py-10">
       <div
-        class="mb-10 flex flex-col gap-4 rounded-3xl bg-white/5 p-6 lg:flex-row lg:items-end lg:justify-between lg:p-0"
+        class="mb-6 flex flex-col gap-4 rounded-3xl bg-white/5 p-5 lg:flex-row lg:items-end lg:justify-between lg:p-4"
       >
         <div>
           <span
@@ -395,11 +393,11 @@ onBeforeUnmount(() => {
             Categories
           </span>
 
-          <h2 class="mt-5 text-4xl font-black tracking-tight text-slate-500">
+          <h2 class="mt-4 text-2xl font-black tracking-tight text-slate-500">
             Shop By Category
           </h2>
 
-          <p class="mt-3 max-w-xl text-lg text-slate-500">
+          <p class="mt-3 max-w-xl text-sm text-slate-500">
             Explore products across multiple premium categories.
           </p>
         </div>
@@ -413,7 +411,7 @@ onBeforeUnmount(() => {
       </div>
 
       <div
-        class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
+        class="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
       >
         <RouterLink
           v-for="cat in categories"
@@ -422,16 +420,16 @@ onBeforeUnmount(() => {
           class="group overflow-hidden rounded-[28px] bg-white p-6 text-center shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl no-underline"
         >
           <div
-            class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-5xl transition duration-300 group-hover:scale-110 group-hover:bg-primary-600 group-hover:text-white"
+            class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-4xl transition duration-300 group-hover:scale-110 group-hover:bg-primary-600 group-hover:text-white"
           >
             {{ cat.icon }}
           </div>
 
-          <h3 class="mt-6 text-lg font-bold text-slate-500">
+          <h3 class="mt-4 text-base font-bold text-slate-500">
             {{ cat.name }}
           </h3>
 
-          <p class="mt-2 text-sm text-slate-500">Premium Collection</p>
+          <p class="mt-2 text-xs text-slate-500">Premium Collection</p>
 
           <div class="mt-5 text-sm font-semibold text-primary-600">
             Explore →
@@ -453,11 +451,11 @@ onBeforeUnmount(() => {
     <!-- FEATURED PRODUCTS -->
     <!-- ===================================================== -->
 
-    <section class="py-16">
+    <section class="py-10">
       <!-- Heading -->
 
       <div
-        class="mb-10 flex flex-col gap-4 rounded-3xl bg-white/5 p-6 lg:flex-row lg:items-end lg:justify-between lg:p-0"
+        class="mb-8 flex flex-col gap-4 rounded-3xl bg-white/5 p-5 lg:flex-row lg:items-end lg:justify-between lg:p-4"
       >
         <div>
           <span
@@ -466,11 +464,11 @@ onBeforeUnmount(() => {
             Featured Products
           </span>
 
-          <h2 class="mt-5 text-4xl font-black tracking-tight text-slate-500">
+          <h2 class="mt-5 text-3xl font-black tracking-tight text-slate-500">
             Best Selling Products
           </h2>
 
-          <p class="mt-3 max-w-2xl text-lg text-slate-500">
+          <p class="mt-3 max-w-2xl text-sm text-slate-500">
             Hand-picked products loved by thousands of customers.
           </p>
         </div>
@@ -547,14 +545,14 @@ onBeforeUnmount(() => {
               <img
                 :src="product.image"
                 :alt="product.name"
-                class="mx-auto h-72 w-full object-contain p-8 transition duration-500 group-hover:scale-110"
+                class="mx-auto h-44 w-full object-contain p-3 transition duration-500 group-hover:scale-110"
               />
             </RouterLink>
           </div>
 
           <!-- Content -->
 
-          <div class="p-6">
+          <div class="p-4">
             <!-- Category -->
 
             <p
@@ -567,7 +565,7 @@ onBeforeUnmount(() => {
 
             <RouterLink :to="`/products/${product.id}`" class="no-underline">
               <h3
-                class="mt-3 line-clamp-2 min-h-[56px] text-lg font-bold text-slate-500 transition group-hover:text-primary-600"
+                class="mt-2 line-clamp-2 min-h-[42px] text-sm font-bold text-slate-500 transition group-hover:text-primary-600"
               >
                 {{ product.name }}
               </h3>
@@ -599,7 +597,7 @@ onBeforeUnmount(() => {
 
             <!-- Price -->
 
-            <div class="mt-6 flex items-end justify-between">
+            <div class="mt-3 flex items-end justify-between">
               <div>
                 <div class="text-xl font-black text-primary-700">
                   {{ formatCurrency(product.price) }}
@@ -620,25 +618,25 @@ onBeforeUnmount(() => {
             <button
               @click="buyNow(product)"
               :disabled="!product.inStock"
-              class="mt-6 w-full rounded-2xl bg-cyan-500 py-3 font-bold text-white transition hover:bg-cyan-400 hover:scale-[1.02] hover:shadow-xl disabled:bg-slate-300"
+              class="mt-3 w-full rounded-2xl bg-cyan-500 py-2 font-bold text-white transition hover:bg-cyan-400 hover:scale-[1.02] hover:shadow-xl disabled:bg-slate-300"
             >
               ⚡ Buy Now
             </button>
 
             <!-- Bottom Buttons -->
 
-            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <button
                 @click="addToCart(product)"
                 :disabled="!product.inStock"
-                class="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 py-3 text-sm font-semibold text-white transition hover:from-cyan-300 hover:to-blue-500 disabled:bg-slate-300"
+                class="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 py-2 text-sm font-semibold text-white transition hover:from-cyan-300 hover:to-blue-500 disabled:bg-slate-300"
               >
                 {{ cart.isInCart(product.id) ? "✓ In Cart" : "Add To Cart" }}
               </button>
 
               <RouterLink
                 :to="`/products/${product.id}`"
-                class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-primary-600 hover:text-primary-600"
+                class="rounded-xl border border-slate-300 py-2 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-primary-600 hover:text-primary-600"
               >
                 Details
               </RouterLink>
@@ -654,55 +652,55 @@ onBeforeUnmount(() => {
     <!-- ===================================================== -->
 
     <section
-      class="overflow-hidden rounded-[32px] bg-gradient-to-r from-primary-700 via-primary-600 to-cyan-500"
+      class="overflow-hidden rounded-[28px] bg-gradient-to-r from-primary-700 via-primary-600 to-cyan-500"
     >
-      <div class="grid items-center gap-8 px-8 py-12 lg:grid-cols-2 lg:px-16">
+      <div class="grid items-center gap-6 px-5 py-7 lg:grid-cols-2 lg:px-10">
         <div>
           <span
-            class="rounded-full bg-white/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-white"
+            class="rounded-full bg-white/20 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.35em] text-white"
           >
             Limited Time Offer
           </span>
 
-          <h2 class="mt-6 text-5xl font-black text-white">Up To 50% OFF</h2>
+          <h2 class="mt-5 text-3xl font-black text-white">Up To 50% OFF</h2>
 
-          <p class="mt-5 max-w-lg text-lg leading-8 text-blue-100">
+          <p class="mt-4 max-w-lg text-sm leading-6 text-blue-100">
             Grab your favourite products before the offer ends.
           </p>
 
           <RouterLink
             to="/products"
-            class="mt-8 inline-flex rounded-2xl bg-white px-8 py-4 font-bold text-primary-700 no-underline transition hover:scale-105"
+            class="mt-6 inline-flex rounded-2xl bg-white px-6 py-3 font-bold text-primary-700 no-underline transition hover:scale-105"
           >
             Shop Deals →
           </RouterLink>
         </div>
 
         <div class="hidden justify-center lg:flex">
-          <div class="rounded-[30px] bg-white/10 p-10 backdrop-blur-xl">
-            <div class="grid grid-cols-2 gap-8 text-center text-white">
+          <div class="rounded-[28px] bg-white/10 p-6 backdrop-blur-xl">
+            <div class="grid grid-cols-2 gap-6 text-center text-white">
               <div>
-                <div class="text-4xl font-black">5K+</div>
+                <div class="text-3xl font-black">5K+</div>
 
-                <p class="text-sm uppercase tracking-widest">Products</p>
+                <p class="text-xs uppercase tracking-widest">Products</p>
               </div>
 
               <div>
-                <div class="text-4xl font-black">25K+</div>
+                <div class="text-3xl font-black">25K+</div>
 
-                <p class="text-sm uppercase tracking-widest">Customers</p>
+                <p class="text-xs uppercase tracking-widest">Customers</p>
               </div>
 
               <div>
-                <div class="text-4xl font-black">4.9</div>
+                <div class="text-3xl font-black">4.9</div>
 
-                <p class="text-sm uppercase tracking-widest">Rating</p>
+                <p class="text-xs uppercase tracking-widest">Rating</p>
               </div>
 
               <div>
-                <div class="text-4xl font-black">24×7</div>
+                <div class="text-3xl font-black">24×7</div>
 
-                <p class="text-sm uppercase tracking-widest">Support</p>
+                <p class="text-xs uppercase tracking-widest">Support</p>
               </div>
             </div>
           </div>
@@ -714,7 +712,7 @@ onBeforeUnmount(() => {
     <!-- WHY CHOOSE US -->
     <!-- ===================================================== -->
 
-    <section class="py-16">
+    <section class="py-12">
       <div class="text-center">
         <span
           class="rounded-full bg-primary-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-primary-700"
@@ -722,16 +720,16 @@ onBeforeUnmount(() => {
           Why Choose Us
         </span>
 
-        <h2 class="mt-5 text-4xl font-black text-slate-500">
+        <h2 class="mt-4 text-3xl font-black text-slate-500">
           Shopping Made Better
         </h2>
 
-        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-500">
+        <p class="mx-auto mt-4 max-w-2xl text-base text-slate-500">
           We provide premium shopping experience from purchase to delivery.
         </p>
       </div>
 
-      <div class="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+      <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div
           class="group rounded-[28px] bg-white p-8 text-center shadow-lg transition hover:-translate-y-2 hover:shadow-2xl"
         >
@@ -771,7 +769,7 @@ onBeforeUnmount(() => {
     <!-- ===================================================== -->
 
     <section class="overflow-hidden rounded-[32px] bg-white shadow-xl">
-      <div class="grid items-center gap-10 px-8 py-12 lg:grid-cols-2 lg:px-16">
+      <div class="grid items-center gap-5 px-5 py-7 lg:grid-cols-2 lg:px-10">
         <div>
           <span
             class="rounded-full bg-primary-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-primary-700"
@@ -779,14 +777,14 @@ onBeforeUnmount(() => {
             Newsletter
           </span>
 
-          <h2 class="mt-6 text-4xl font-black text-slate-500">Stay Updated</h2>
+          <h2 class="mt-4 text-2xl font-black text-slate-500">Stay Updated</h2>
 
-          <p class="mt-5 text-lg text-slate-500">
+          <p class="mt-3 text-sm text-slate-500">
             Subscribe for exclusive offers and new arrivals.
           </p>
         </div>
 
-        <div class="flex flex-col gap-4 sm:flex-row">
+        <div class="flex flex-col gap-3 sm:flex-row">
           <input
             type="email"
             placeholder="Enter your email"
@@ -806,8 +804,8 @@ onBeforeUnmount(() => {
     <!-- FINAL CTA -->
     <!-- ===================================================== -->
 
-    <section class="rounded-[32px] bg-slate-900 px-8 py-14 text-center">
-      <h2 class="text-4xl font-black text-white">Ready To Start Shopping?</h2>
+    <section class="rounded-[32px] bg-slate-900 px-6 py-10 text-center">
+      <h2 class="text-2xl font-black text-white">Ready To Start Shopping?</h2>
 
       <p class="mx-auto mt-5 max-w-2xl text-lg text-slate-300">
         Discover thousands of premium products with secure checkout and fast
@@ -816,7 +814,7 @@ onBeforeUnmount(() => {
 
       <RouterLink
         to="/products"
-        class="mt-8 inline-flex rounded-2xl bg-primary-600 px-10 py-4 font-bold text-white no-underline transition hover:bg-primary-700"
+        class="mt-5 inline-flex rounded-2xl bg-primary-600 px-7 py-3 font-bold text-white no-underline transition hover:bg-primary-700"
       >
         Explore Products →
       </RouterLink>

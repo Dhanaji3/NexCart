@@ -127,14 +127,14 @@ function buyNow(product: Product) {
 }
 </script>
 <template>
-  <div class="space-y-10">
+  <div class="space-y-10 mx-auto max-w-[1220px] px-4 sm:px-6 lg:px-8">
     <!-- ===================================================== -->
     <!-- ========================================================= -->
     <!-- PREMIUM PRODUCTS HERO -->
     <!-- ========================================================= -->
 
     <section
-      class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-950 via-[#18254A] to-[#2B348C] border border-white/5 shadow-2xl"
+      class="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-slate-950 via-primary-900 to-primary-700 border border-white/10 shadow-2xl mx-auto max-w-[1200px]"
     >
       <!-- Glow -->
 
@@ -149,7 +149,7 @@ function buyNow(product: Product) {
       <!-- Grid -->
 
       <div
-        class="relative grid items-center gap-8 lg:grid-cols-[2fr_360px] px-8 py-10 lg:px-14"
+        class="relative grid min-h-[250px] items-center gap-5 lg:grid-cols-[1.5fr_0.95fr] px-5 py-5 sm:px-7 lg:px-9"
       >
         <!-- LEFT -->
 
@@ -161,12 +161,12 @@ function buyNow(product: Product) {
           </span>
 
           <h1
-            class="mt-5 text-4xl lg:text-5xl font-black tracking-tight text-white"
+            class="mt-4 text-lg font-black leading-tight tracking-tight text-white sm:text-xl lg:text-2xl"
           >
             Explore Premium Products
           </h1>
 
-          <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
+          <p class="mt-3 max-w-xl text-sm leading-6 text-slate-300">
             Discover carefully selected products with premium quality,
             lightning-fast delivery and secure checkout.
           </p>
@@ -176,14 +176,14 @@ function buyNow(product: Product) {
           <div class="mt-8 flex flex-wrap gap-4">
             <RouterLink
               to="/cart"
-              class="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-7 py-3 font-semibold text-white no-underline transition hover:scale-105"
+              class="rounded-xl bg-cyan-500 px-5 py-3 font-semibold text-white no-underline transition hover:scale-105 hover:bg-cyan-400"
             >
               View Cart
             </RouterLink>
 
             <RouterLink
               to="/wishlist"
-              class="rounded-2xl border border-white/15 bg-white/5 px-7 py-3 font-semibold text-white no-underline backdrop-blur transition hover:bg-white/10"
+              class="rounded-xl border border-white/20 bg-white/10 px-5 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
             >
               Wishlist
             </RouterLink>
@@ -196,46 +196,46 @@ function buyNow(product: Product) {
           <div
             class="rounded-[30px] border border-white/10 bg-white/10 backdrop-blur-xl p-8"
           >
-            <div class="grid grid-cols-2 gap-8">
+            <div class="grid grid-cols-2 gap-6">
               <div>
-                <div class="text-4xl font-black text-white">
+                <div class="text-3xl font-black text-white">
                   {{ products.length }}
                 </div>
 
                 <div
-                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                  class="mt-2 text-[10px] uppercase tracking-widest text-slate-300"
                 >
                   Products
                 </div>
               </div>
 
               <div>
-                <div class="text-4xl font-black text-white">
+                <div class="text-3xl font-black text-white">
                   {{ categories.length }}
                 </div>
 
                 <div
-                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                  class="mt-2 text-[10px] uppercase tracking-widest text-slate-300"
                 >
                   Categories
                 </div>
               </div>
 
               <div>
-                <div class="text-4xl font-black text-white">4.9</div>
+                <div class="text-3xl font-black text-white">4.9</div>
 
                 <div
-                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                  class="mt-2 text-[10px] uppercase tracking-widest text-slate-300"
                 >
                   Rating
                 </div>
               </div>
 
               <div>
-                <div class="text-4xl font-black text-white">24×7</div>
+                <div class="text-3xl font-black text-white">24×7</div>
 
                 <div
-                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                  class="mt-2 text-[10px] uppercase tracking-widest text-slate-300"
                 >
                   Support
                 </div>
@@ -251,9 +251,9 @@ function buyNow(product: Product) {
     <!-- ========================================================= -->
 
     <section
-      class="sticky top-24 z-30 rounded-[28px] border border-white/10 bg-slate-900/80 backdrop-blur-2xl shadow-[0_15px_40px_rgba(0,0,0,.35)] px-6 py-6"
+      class="sticky top-20 z-30 rounded-[28px] border border-white/10 bg-slate-900/80 backdrop-blur-2xl shadow-[0_15px_40px_rgba(0,0,0,.35)] mx-auto max-w-[1200px] px-6 py-5"
     >
-      <div class="grid gap-5 xl:grid-cols-[2fr_1fr_1fr_auto]">
+      <div class="grid gap-4 xl:grid-cols-[1.7fr_1fr_1fr_auto]">
         <!-- ===================================== -->
         <!-- SEARCH -->
         <!-- ===================================== -->
@@ -275,7 +275,7 @@ function buyNow(product: Product) {
             @input="onSearchInput(($event.target as HTMLInputElement).value)"
             type="text"
             placeholder="Search premium products..."
-            class="w-full rounded-2xl border border-white/10 bg-slate-800 py-4 pl-14 pr-5 text-white placeholder:text-slate-500 outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
+            class="w-full max-w-xl min-w-0 rounded-2xl border border-white/10 bg-slate-800 py-3 pl-12 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
           />
         </div>
 
@@ -285,7 +285,7 @@ function buyNow(product: Product) {
 
         <select
           v-model="selectedCategory"
-          class="rounded-2xl border border-white/10 bg-slate-800 px-5 py-4 text-white outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
+          class="rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-sm text-white outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
         >
           <option value="">All Categories</option>
 
@@ -300,7 +300,7 @@ function buyNow(product: Product) {
 
         <select
           v-model="sortBy"
-          class="rounded-2xl border border-white/10 bg-slate-800 px-5 py-4 text-white outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
+          class="rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-sm text-white outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
         >
           <option value="rating">⭐ Top Rated</option>
 
@@ -318,38 +318,10 @@ function buyNow(product: Product) {
         <button
           v-if="searchQuery || selectedCategory"
           @click="resetFilters"
-          class="rounded-2xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 font-semibold text-white transition hover:scale-105"
+          class="rounded-2xl bg-gradient-to-r from-red-500 to-red-600 px-5 py-3 font-semibold text-white transition hover:scale-105"
         >
           Reset
         </button>
-      </div>
-
-      <!-- ===================================== -->
-      <!-- BOTTOM -->
-      <!-- ===================================== -->
-
-      <div
-        class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5"
-      >
-        <!-- Product Count -->
-
-        <div class="text-slate-400">
-          Showing
-
-          <span class="font-bold text-white">
-            {{ filteredProducts.length }}
-          </span>
-
-          Premium Products
-        </div>
-
-        <!-- Selected Category -->
-
-        <div
-          class="rounded-full bg-primary-500/20 px-4 py-2 text-sm font-semibold text-primary-300"
-        >
-          {{ selectedCategory || "All Categories" }}
-        </div>
       </div>
     </section>
 
@@ -392,9 +364,9 @@ function buyNow(product: Product) {
       <div class="text-center">
         <div class="text-7xl">📦</div>
 
-        <h2 class="mt-6 text-4xl font-black">No Products Found</h2>
+        <h2 class="mt-6 text-3xl font-black">No Products Found</h2>
 
-        <p class="mt-4 text-lg text-slate-500">
+        <p class="mt-4 text-base text-slate-500">
           Try changing your filters or search keyword.
         </p>
 
@@ -414,9 +386,9 @@ function buyNow(product: Product) {
       <div class="text-center">
         <div class="text-7xl">⚠️</div>
 
-        <h2 class="mt-6 text-4xl font-black">Something went wrong</h2>
+        <h2 class="mt-6 text-3xl font-black">Something went wrong</h2>
 
-        <p class="mt-4 text-lg text-slate-500">
+        <p class="mt-4 text-base text-slate-500">
           {{ error }}
         </p>
 
@@ -433,7 +405,10 @@ function buyNow(product: Product) {
     <!-- PRODUCT GRID -->
     <!-- ===================================================== -->
 
-    <section v-else class="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+    <section
+      v-else
+      class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
       <!-- ===================================================== -->
       <article
         v-for="product in paginatedProducts"
@@ -445,7 +420,7 @@ function buyNow(product: Product) {
         <!-- ====================================== -->
 
         <div
-          class="relative flex h-[260px] items-center justify-center overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100"
+          class="relative flex h-[140px] items-center justify-center overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100"
         >
           <!-- Sale -->
 
@@ -481,7 +456,7 @@ function buyNow(product: Product) {
               :src="product.image"
               :alt="product.name"
               loading="lazy"
-              class="h-[190px] object-contain transition-all duration-500 group-hover:scale-110"
+              class="h-[125px] object-contain transition-all duration-500 group-hover:scale-110"
             />
           </RouterLink>
         </div>
@@ -490,11 +465,11 @@ function buyNow(product: Product) {
         <!-- CONTENT -->
         <!-- ====================================== -->
 
-        <div class="p-6">
+        <div class="p-3">
           <!-- Category -->
 
           <div
-            class="text-xs font-bold uppercase tracking-[0.3em] text-primary-600"
+            class="text-[9px] font-bold uppercase tracking-[0.25em] text-primary-600"
           >
             {{ product.category }}
           </div>
@@ -503,7 +478,7 @@ function buyNow(product: Product) {
 
           <RouterLink :to="`/products/${product.id}`" class="no-underline">
             <h3
-              class="mt-3 min-h-[58px] line-clamp-2 text-lg font-bold leading-7 text-slate-900 transition group-hover:text-primary-600"
+              class="mt-2 min-h-[44px] line-clamp-2 text-base font-bold leading-6 text-slate-900 transition group-hover:text-primary-600"
             >
               {{ product.name }}
             </h3>
@@ -511,7 +486,7 @@ function buyNow(product: Product) {
 
           <!-- Rating -->
 
-          <div class="mt-5 flex items-center justify-between">
+          <div class="mt-3 flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="text-yellow-500"> ⭐⭐⭐⭐⭐ </span>
 
@@ -525,9 +500,9 @@ function buyNow(product: Product) {
 
           <!-- Price -->
 
-          <div class="mt-6 flex items-end justify-between">
+          <div class="mt-4 flex items-end justify-between">
             <div>
-              <div class="text-3xl font-black text-primary-700">
+              <div class="text-xl font-black text-primary-700">
                 {{ formatCurrency(product.price) }}
               </div>
 
@@ -563,7 +538,7 @@ function buyNow(product: Product) {
           <!-- TRUST BADGES -->
           <!-- ====================================== -->
 
-          <div class="mt-5 flex flex-wrap gap-2">
+          <div class="mt-2 flex flex-wrap gap-1">
             <span
               class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700"
             >
@@ -590,7 +565,7 @@ function buyNow(product: Product) {
           <button
             @click="buyNow(product)"
             :disabled="!product.inStock"
-            class="mt-6 w-full rounded-2xl bg-gradient-to-r from-primary-600 via-blue-600 to-indigo-600 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+            class="mt-2 w-full rounded-xl bg-cyan-500 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             ⚡ Buy Now
           </button>
@@ -599,18 +574,18 @@ function buyNow(product: Product) {
           <!-- ACTIONS -->
           <!-- ====================================== -->
 
-          <div class="mt-4 grid grid-cols-2 gap-3">
+          <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <button
               @click="addToCart(product)"
               :disabled="!product.inStock"
-              class="rounded-xl border border-primary-600 bg-primary-50 py-3 text-sm font-semibold text-primary-700 transition-all hover:bg-primary-600 hover:text-white disabled:opacity-50"
+              class="rounded-2xl bg-cyan-500 px-3.5 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50 min-h-[38px]"
             >
-              {{ cart.isInCart(product.id) ? "✓ In Cart" : "Add Cart" }}
+              {{ cart.isInCart(product.id) ? "✓ In Cart" : "Add to Cart" }}
             </button>
 
             <RouterLink
               :to="`/products/${product.id}`"
-              class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition-all hover:border-primary-600 hover:bg-primary-50 hover:text-primary-700"
+              class="rounded-2xl border border-slate-300 bg-white px-3.5 py-2 text-center text-sm font-semibold text-slate-700 no-underline transition-all duration-300 hover:border-primary-600 hover:bg-primary-50 hover:text-primary-700 min-h-[38px]"
             >
               Details
             </RouterLink>
@@ -630,9 +605,9 @@ function buyNow(product: Product) {
         📦
       </div>
 
-      <h2 class="mt-8 text-4xl font-black text-slate-900">No Products Found</h2>
+      <h2 class="mt-8 text-3xl font-black text-slate-900">No Products Found</h2>
 
-      <p class="mx-auto mt-5 max-w-xl text-lg leading-8 text-slate-500">
+      <p class="mx-auto mt-5 max-w-xl text-base leading-7 text-slate-500">
         We couldn't find any products matching your search. Try changing the
         filters or browse all categories.
       </p>
@@ -763,23 +738,7 @@ section {
   }
 }
 
-@media (max-width: 1280px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
   h1 {
     font-size: 2.3rem;
   }
