@@ -145,14 +145,14 @@ function buyNow() {
           <button
             @click="addToCart"
             :disabled="!product.inStock"
-            class="btn-accent"
+            class="rounded-xl bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:from-cyan-300 hover:via-cyan-400 hover:to-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             {{ cart.isInCart(product.id) ? "✓ Added to Cart" : "Add to Cart" }}
           </button>
           <button
             @click="buyNow"
             :disabled="!product.inStock"
-            class="btn-accent"
+            class="rounded-2xl bg-cyan-500 px-6 py-3 font-semibold text-white transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-slate-300"
           >
             ⚡Buy Now
           </button>

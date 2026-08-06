@@ -1,23 +1,47 @@
 <script setup lang="ts">
-import { computed, onMounted, onBeforeUnmount, ref } from "vue";
-import { useHomeApi } from "../composables";
-import { useCartStore } from "shared";
-import type { Product } from "shared";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
-import { formatCurrency } from "shared";
+
+import { useHomeApi } from "../composables";
+import { useCartStore, formatCurrency } from "shared";
+
+import type { Product } from "shared";
+
+/* -------------------------------------------------------
+    ROUTER
+-------------------------------------------------------- */
 
 const router = useRouter();
 
+/* -------------------------------------------------------
+    STORES
+-------------------------------------------------------- */
+
+const cart = useCartStore();
+
+/* -------------------------------------------------------
+    HOME API
+-------------------------------------------------------- */
+
 const { featuredProducts, categories, loading, fetchHome } = useHomeApi();
 
-/* ---------------- Hero ---------------- */
+/* -------------------------------------------------------
+    HERO PRODUCTS
+-------------------------------------------------------- */
 
 const activeSlide = ref(0);
-const cart = useCartStore();
 
 const heroSlides = computed(() => featuredProducts.value.slice(0, 5));
 
 const featuredGridProducts = computed(() => featuredProducts.value.slice(0, 8));
+
+/* -------------------------------------------------------
+    HEADER SHADOW
+-------------------------------------------------------- */
+
+/* -------------------------------------------------------
+    HERO SLIDER
+-------------------------------------------------------- */
 
 let carouselTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -38,6 +62,13 @@ const goToSlide = (index: number) => {
   activeSlide.value = index;
 };
 
+const stopCarousel = () => {
+  if (carouselTimer) {
+    clearInterval(carouselTimer);
+    carouselTimer = null;
+  }
+};
+
 const startCarousel = () => {
   stopCarousel();
 
@@ -48,14 +79,9 @@ const startCarousel = () => {
   }, 4500);
 };
 
-const stopCarousel = () => {
-  if (carouselTimer) {
-    clearInterval(carouselTimer);
-    carouselTimer = null;
-  }
-};
-
-/* ---------------- Swipe ---------------- */
+/* -------------------------------------------------------
+    TOUCH SUPPORT
+-------------------------------------------------------- */
 
 let touchStart = 0;
 
@@ -76,8 +102,12 @@ const onTouchEnd = (event: TouchEvent) => {
 };
 
 const pauseHero = () => stopCarousel();
-
 const resumeHero = () => startCarousel();
+
+/* -------------------------------------------------------
+    CART
+-------------------------------------------------------- */
+
 function addToCart(product: Product) {
   cart.addToCart(product);
 }
@@ -85,7 +115,6 @@ function addToCart(product: Product) {
 const buyNow = (product: Product) => {
   if (!product.inStock) return;
 
-  // Don't add duplicate items
   if (!cart.isInCart(product.id)) {
     cart.addToCart(product);
   }
@@ -93,8 +122,13 @@ const buyNow = (product: Product) => {
   router.push("/checkout");
 };
 
+/* -------------------------------------------------------
+    LIFECYCLE
+-------------------------------------------------------- */
+
 onMounted(async () => {
   await fetchHome();
+
   startCarousel();
 });
 
@@ -104,314 +138,394 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <div class="flex flex-col gap-12">
-    <!-- ================= HERO SECTION ================= -->
+    <!-- ===================================================== -->
+    <!-- HERO -->
+    <!-- ===================================================== -->
 
     <section
-      class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-primary-950 to-primary-900 shadow-xl"
+      v-if="heroSlides.length"
+      class="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-slate-950 via-primary-900 to-primary-700"
       @mouseenter="pauseHero"
       @mouseleave="resumeHero"
       @touchstart="onTouchStart"
       @touchend="onTouchEnd"
     >
-      <!-- Background -->
+      <!-- Background Blur -->
 
       <div
-        class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-accent-500/10 blur-3xl"
-      ></div>
+        class="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-cyan-400/20 blur-[120px]"
+      />
 
       <div
-        class="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-primary-400/10 blur-3xl"
-      ></div>
+        class="absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-primary-500/20 blur-[100px]"
+      />
 
-      <!-- HERO -->
+      <Transition name="fade" mode="out-in">
+        <div
+          :key="heroSlides[activeSlide].id"
+          class="grid min-h-[380px] items-center gap-6 px-4 py-8 sm:px-6 lg:min-h-[420px] lg:grid-cols-[1fr_1fr] lg:px-12"
+        >
+          <!-- ================================================= -->
+          <!-- LEFT -->
+          <!-- ================================================= -->
 
-      <div v-if="heroSlides.length" class="relative min-h-[340px]">
-        <Transition name="fade" mode="out-in">
-          <div
-            :key="heroSlides[activeSlide].id"
-            class="grid h-full items-center gap-8 px-6 py-8 md:grid-cols-2 lg:px-12"
-          >
-            <!-- LEFT -->
+          <div class="relative z-10 max-w-xl">
+            <!-- Badge -->
 
-            <div class="max-w-lg">
-              <span
-                class="inline-flex rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-accent-300"
-              >
-                New Collection
+            <span
+              class="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-300"
+            >
+              New Arrival
+            </span>
+
+            <!-- Title -->
+
+            <h1
+              class="mt-5 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl lg:text-6xl"
+            >
+              {{ heroSlides[activeSlide].name }}
+            </h1>
+
+            <!-- Description -->
+
+            <p class="mt-4 max-w-lg text-base leading-7 text-slate-300">
+              Premium quality products crafted for modern lifestyles. Enjoy
+              secure checkout, lightning-fast delivery and trusted support.
+            </p>
+
+            <!-- Price -->
+
+            <div class="mt-6 flex items-center gap-4">
+              <span class="text-4xl font-black text-white">
+                {{ formatCurrency(heroSlides[activeSlide].price) }}
               </span>
 
-              <h1
-                class="mt-5 text-3xl font-extrabold leading-tight text-white md:text-4xl lg:text-5xl"
+              <span
+                class="rounded-full bg-red-500 px-3 py-1 text-sm font-bold text-white"
               >
-                {{ heroSlides[activeSlide].name }}
-              </h1>
+                SALE
+              </span>
+            </div>
 
-              <p
-                class="mt-4 max-w-md text-sm leading-7 text-slate-300 md:text-base"
+            <!-- Features -->
+
+            <div class="mt-6 flex flex-wrap gap-3">
+              <div
+                class="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur"
               >
-                Premium quality products with secure payment, lightning-fast
-                delivery and trusted service.
-              </p>
+                🚚 Free Delivery
+              </div>
 
-              <div class="mt-7 flex flex-wrap gap-3">
-                <button
-                  @click="buyNow(heroSlides[activeSlide])"
-                  class="btn-accent"
-                >
-                  Buy Now
-                </button>
+              <div
+                class="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur"
+              >
+                🔒 Secure Payment
+              </div>
 
-                <RouterLink
-                  to="/products"
-                  class="rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold text-white no-underline transition hover:bg-white/10"
-                >
-                  Explore
-                </RouterLink>
+              <div
+                class="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur"
+              >
+                ↩ 30 Days Return
               </div>
             </div>
 
-            <!-- RIGHT -->
+            <!-- Buttons -->
 
-            <div class="hidden justify-center md:flex">
-              <img
-                :src="heroSlides[activeSlide].image"
-                :alt="heroSlides[activeSlide].name"
-                class="h-60 w-auto object-contain transition duration-500 hover:scale-105 lg:h-72"
-              />
+            <div class="mt-7 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+              <button
+                @click="buyNow(heroSlides[activeSlide])"
+                class="w-full rounded-xl bg-cyan-500 px-7 py-3 font-semibold text-white transition hover:scale-105 hover:bg-cyan-400 sm:w-auto"
+              >
+                Buy Now
+              </button>
+
+              <RouterLink
+                to="/products"
+                class="w-full rounded-xl border border-white/20 px-7 py-3 font-semibold text-white no-underline transition hover:bg-white/10 sm:w-auto"
+              >
+                Explore Products
+              </RouterLink>
             </div>
           </div>
-        </Transition>
 
-        <!-- Previous -->
+          <!-- ================================================= -->
+          <!-- RIGHT -->
+          <!-- ================================================= -->
 
+          <div class="relative flex items-center justify-center">
+            <!-- Glow -->
+
+            <div
+              class="absolute h-72 w-72 rounded-full bg-cyan-400/20 blur-[90px]"
+            ></div>
+
+            <!-- Product Image -->
+
+            <img
+              :src="heroSlides[activeSlide].image"
+              :alt="heroSlides[activeSlide].name"
+              class="relative z-10 h-[240px] object-contain transition duration-500 hover:scale-105 md:h-[300px] lg:h-[360px]"
+            />
+
+            <!-- Floating Rating Card -->
+            <!-- 
+            <div
+              class="absolute bottom-4 right-4 hidden rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-xl xl:block"
+            >
+              <div class="text-yellow-400 text-lg">⭐⭐⭐⭐⭐</div>
+
+              <div class="mt-2 text-3xl font-black text-white">4.9</div>
+
+              <div class="text-xs uppercase tracking-widest text-slate-300">
+                Customer Rating
+              </div>
+            </div> -->
+
+            <!-- Floating Offer Card -->
+            <!-- 
+            <div
+              class="absolute left-0 top-8 hidden rounded-2xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-xl lg:block"
+            >
+              <div class="text-xs uppercase tracking-widest text-cyan-300">
+                OFFER
+              </div>
+
+              <div class="mt-1 text-2xl font-black text-white">50% OFF</div>
+
+              <div class="text-xs text-slate-300">Limited Time</div>
+            </div> -->
+          </div>
+        </div>
+      </Transition>
+
+      <!-- Previous -->
+
+      <button
+        v-if="heroSlides.length > 1"
+        @click="prevSlide"
+        class="absolute left-5 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-xl text-white backdrop-blur-lg transition hover:bg-cyan-500 lg:flex"
+      >
+        ❮
+      </button>
+
+      <!-- Next -->
+
+      <button
+        v-if="heroSlides.length > 1"
+        @click="nextSlide"
+        class="absolute right-5 top-1/2 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-xl text-white backdrop-blur-lg transition hover:bg-cyan-500 lg:flex"
+      >
+        ❯
+      </button>
+
+      <!-- Mobile Controls -->
+
+      <div
+        v-if="heroSlides.length > 1"
+        class="absolute bottom-5 right-5 flex gap-3 lg:hidden"
+      >
         <button
           @click="prevSlide"
-          class="absolute left-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:flex"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-lg"
         >
           ❮
         </button>
 
-        <!-- Next -->
-
         <button
           @click="nextSlide"
-          class="absolute right-4 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition hover:bg-white/20 md:flex"
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-lg"
         >
           ❯
         </button>
-
-        <!-- Indicators -->
-
-        <div class="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2">
-          <button
-            v-for="(slide, index) in heroSlides"
-            :key="slide.id"
-            @click="goToSlide(index)"
-            class="h-2 rounded-full transition-all"
-            :class="activeSlide === index ? 'w-8 bg-white' : 'w-2 bg-white/40'"
-          />
-        </div>
       </div>
 
-      <!-- EMPTY -->
+      <!-- Indicators -->
 
       <div
-        v-else
-        class="flex min-h-[340px] flex-col items-center justify-center text-center"
+        v-if="heroSlides.length > 1"
+        class="absolute bottom-5 left-1/2 flex -translate-x-1/2 gap-2"
       >
-        <h1 class="text-4xl font-bold text-white">Welcome to NexCart</h1>
-
-        <p class="mt-4 text-slate-300">Shop smarter with premium products.</p>
-
-        <RouterLink
-          to="/products"
-          class="mt-6 rounded-lg bg-accent-500 px-6 py-3 font-semibold text-white no-underline"
-        >
-          Shop Now
-        </RouterLink>
+        <button
+          v-for="(slide, index) in heroSlides"
+          :key="slide.id"
+          @click="goToSlide(index)"
+          class="h-2 rounded-full transition-all duration-300"
+          :class="
+            activeSlide === index
+              ? 'w-8 bg-cyan-400'
+              : 'w-2 bg-white/40 hover:bg-white'
+          "
+        />
       </div>
     </section>
-    <!-- ================= SHOP BY CATEGORY ================= -->
 
-    <section class="space-y-6">
-      <!-- Heading -->
+    <!-- Empty State -->
 
-      <div class="flex items-center justify-between">
+    <section
+      v-else
+      class="flex min-h-[380px] flex-col items-center justify-center rounded-[28px] bg-gradient-to-br from-slate-950 via-primary-900 to-primary-700 px-6 text-center"
+    >
+      <h1 class="text-4xl font-black text-white">Welcome to NexCart</h1>
+
+      <p class="mt-4 max-w-lg text-slate-300">
+        Discover premium products with secure checkout, fast delivery and
+        amazing offers.
+      </p>
+
+      <RouterLink
+        to="/products"
+        class="mt-8 rounded-xl bg-cyan-500 px-7 py-3 font-semibold text-white no-underline transition hover:bg-cyan-400"
+      >
+        Explore Products
+      </RouterLink>
+    </section>
+
+    <!-- ===================================================== -->
+    <!-- CATEGORIES -->
+    <!-- ===================================================== -->
+
+    <section class="py-16">
+      <div
+        class="mb-10 flex flex-col gap-4 rounded-3xl bg-white/5 p-6 lg:flex-row lg:items-end lg:justify-between lg:p-0"
+      >
         <div>
           <span
-            class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-600"
+            class="rounded-full bg-primary-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-primary-700"
           >
-            Browse
+            Categories
           </span>
 
-          <h2 class="mt-1 text-2xl md:text-3xl font-bold text-slate-900">
-            Shop by Category
+          <h2 class="mt-5 text-4xl font-black tracking-tight text-slate-500">
+            Shop By Category
           </h2>
+
+          <p class="mt-3 max-w-xl text-lg text-slate-500">
+            Explore products across multiple premium categories.
+          </p>
         </div>
 
         <RouterLink
           to="/products"
-          class="hidden md:inline-flex items-center gap-2 text-primary-600 font-semibold no-underline hover:text-primary-700"
+          class="hidden md:inline-flex rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white no-underline transition hover:bg-primary-700 lg:flex"
         >
           View All →
         </RouterLink>
       </div>
 
-      <!-- Categories -->
-
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div
+        class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
+      >
         <RouterLink
           v-for="cat in categories"
           :key="cat.id"
           :to="`/products?category=${cat.slug}`"
-          class="group relative overflow-hidden rounded-2xl bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl no-underline"
+          class="group overflow-hidden rounded-[28px] bg-white p-6 text-center shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl no-underline"
         >
-          <!-- Hover Background -->
           <div
-            class="absolute inset-0 bg-gradient-to-br from-primary-50 to-accent-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          ></div>
-
-          <div class="relative z-10 flex flex-col items-center">
-            <!-- Icon -->
-
-            <div
-              class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-3xl transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-100"
-            >
-              {{ cat.icon }}
-            </div>
-
-            <!-- Name -->
-
-            <h3 class="mt-4 text-center text-sm font-semibold text-slate-800">
-              {{ cat.name }}
-            </h3>
-
-            <!-- Explore -->
-
-            <span
-              class="mt-2 text-xs text-primary-600 opacity-0 transition-all duration-300 group-hover:opacity-100"
-            >
-              Explore →
-            </span>
+            class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-100 text-5xl transition duration-300 group-hover:scale-110 group-hover:bg-primary-600 group-hover:text-white"
+          >
+            {{ cat.icon }}
           </div>
+
+          <h3 class="mt-6 text-lg font-bold text-slate-500">
+            {{ cat.name }}
+          </h3>
+
+          <p class="mt-2 text-sm text-slate-500">Premium Collection</p>
+
+          <div class="mt-5 text-sm font-semibold text-primary-600">
+            Explore →
+          </div>
+        </RouterLink>
+      </div>
+
+      <div class="mt-8 flex justify-center md:hidden">
+        <RouterLink
+          to="/products"
+          class="inline-flex rounded-2xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white no-underline transition hover:bg-primary-700"
+        >
+          View All Categories →
         </RouterLink>
       </div>
     </section>
 
-    <!-- ================= PROMOTIONAL BANNER ================= -->
+    <!-- ===================================================== -->
+    <!-- FEATURED PRODUCTS -->
+    <!-- ===================================================== -->
 
-    <section
-      class="overflow-hidden rounded-2xl bg-gradient-to-r from-primary-700 via-primary-600 to-accent-500"
-    >
-      <div class="grid items-center gap-6 px-6 py-8 md:grid-cols-2 lg:px-10">
-        <!-- Left -->
-
-        <div>
-          <span
-            class="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white"
-          >
-            Limited Offer
-          </span>
-
-          <h2 class="mt-4 text-2xl font-bold text-white md:text-3xl">
-            Up to 50% OFF
-          </h2>
-
-          <p class="mt-3 max-w-md text-sm leading-6 text-primary-100">
-            Save more on selected products. Shop today before the offer ends.
-          </p>
-
-          <RouterLink
-            to="/products"
-            class="mt-6 inline-flex rounded-lg bg-white px-5 py-3 text-sm font-semibold text-primary-700 no-underline transition hover:bg-slate-100"
-          >
-            Shop Deals
-          </RouterLink>
-        </div>
-
-        <!-- Right -->
-
-        <div class="hidden justify-end md:flex">
-          <div class="rounded-2xl bg-white/10 px-8 py-8 backdrop-blur">
-            <div class="grid grid-cols-2 gap-5 text-center text-white">
-              <div>
-                <h3 class="text-3xl font-bold">5K+</h3>
-
-                <p class="text-xs uppercase tracking-widest">Products</p>
-              </div>
-
-              <div>
-                <h3 class="text-3xl font-bold">25K+</h3>
-
-                <p class="text-xs uppercase tracking-widest">Customers</p>
-              </div>
-
-              <div>
-                <h3 class="text-3xl font-bold">99%</h3>
-
-                <p class="text-xs uppercase tracking-widest">Positive</p>
-              </div>
-
-              <div>
-                <h3 class="text-3xl font-bold">24/7</h3>
-
-                <p class="text-xs uppercase tracking-widest">Support</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= FEATURED PRODUCTS ================= -->
-
-    <section class="space-y-6">
+    <section class="py-16">
       <!-- Heading -->
 
-      <div class="flex items-center justify-between">
+      <div
+        class="mb-10 flex flex-col gap-4 rounded-3xl bg-white/5 p-6 lg:flex-row lg:items-end lg:justify-between lg:p-0"
+      >
         <div>
           <span
-            class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-600"
+            class="rounded-full bg-primary-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-primary-700"
           >
-            Popular
+            Featured Products
           </span>
 
-          <h2 class="mt-1 text-2xl md:text-3xl font-bold text-slate-900">
-            Featured Products
+          <h2 class="mt-5 text-4xl font-black tracking-tight text-slate-500">
+            Best Selling Products
           </h2>
+
+          <p class="mt-3 max-w-2xl text-lg text-slate-500">
+            Hand-picked products loved by thousands of customers.
+          </p>
         </div>
 
         <RouterLink
           to="/products"
-          class="hidden md:inline-flex items-center gap-2 font-semibold text-primary-600 no-underline hover:text-primary-700"
+          class="hidden md:inline-flex rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white no-underline transition hover:bg-primary-700"
         >
           View All →
         </RouterLink>
       </div>
-
+      <div class="mt-8 flex justify-center md:hidden">
+        <RouterLink
+          to="/products"
+          class="inline-flex rounded-2xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white no-underline transition hover:bg-primary-700"
+        >
+          Browse All Products →
+        </RouterLink>
+      </div>
       <!-- Loading -->
 
-      <div v-if="loading" class="flex justify-center py-16">
+      <div
+        v-if="loading"
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+      >
         <div
-          class="h-10 w-10 rounded-full border-4 border-slate-200 border-t-primary-600 animate-spin"
-        ></div>
+          v-for="i in 8"
+          :key="i"
+          class="animate-pulse rounded-[28px] bg-white p-6 shadow-lg"
+        >
+          <div class="h-56 rounded-2xl bg-slate-200"></div>
+
+          <div class="mt-5 h-5 rounded bg-slate-200"></div>
+
+          <div class="mt-3 h-5 w-2/3 rounded bg-slate-200"></div>
+
+          <div class="mt-6 h-10 rounded-xl bg-slate-200"></div>
+        </div>
       </div>
 
-      <!-- Product Grid -->
+      <!-- Products -->
 
-      <div v-else class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      <div v-else class="grid gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         <article
           v-for="product in featuredGridProducts"
           :key="product.id"
-          class="group overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          class="group overflow-hidden rounded-[30px] bg-white shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
         >
           <!-- Image -->
 
           <div class="relative overflow-hidden bg-slate-100">
-            <!-- Discount -->
+            <!-- Sale -->
 
             <span
-              class="absolute left-3 top-3 z-10 rounded-full bg-red-500 px-2.5 py-1 text-[11px] font-semibold text-white"
+              class="absolute left-4 top-4 z-20 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white"
             >
               SALE
             </span>
@@ -420,263 +534,267 @@ onBeforeUnmount(() => {
 
             <button
               @click.stop="cart.toggleWishlist(product)"
-              class="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow transition hover:bg-rose-500 hover:text-white"
-              :aria-pressed="cart.isInWishlist(product.id)"
+              class="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-110 hover:bg-red-500 hover:text-white"
             >
-              <span v-if="cart.isInWishlist(product.id)">❤️</span>
-              <span v-else>♡</span>
+              <span v-if="cart.isInWishlist(product.id)"> ❤️ </span>
+
+              <span v-else> 🤍 </span>
             </button>
 
             <!-- Image -->
 
-            <img
-              :src="product.image"
-              :alt="product.name"
-              class="mx-auto h-52 w-full object-contain p-5 transition duration-500 group-hover:scale-110"
-            />
+            <RouterLink :to="`/products/${product.id}`" class="block">
+              <img
+                :src="product.image"
+                :alt="product.name"
+                class="mx-auto h-72 w-full object-contain p-8 transition duration-500 group-hover:scale-110"
+              />
+            </RouterLink>
           </div>
 
           <!-- Content -->
 
-          <div class="p-5">
-            <!-- Rating -->
+          <div class="p-6">
+            <!-- Category -->
 
-            <div class="mb-2 flex items-center justify-between">
-              <span
-                class="rounded-full bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-700"
-              >
-                ⭐ {{ product.rating }}
-              </span>
-
-              <span class="text-xs text-green-600 font-medium"> In Stock </span>
-            </div>
+            <p
+              class="text-xs font-bold uppercase tracking-[0.3em] text-primary-600"
+            >
+              {{ product.category }}
+            </p>
 
             <!-- Name -->
 
-            <h3
-              class="line-clamp-2 min-h-[48px] text-base font-semibold text-slate-800"
-            >
-              {{ product.name }}
-            </h3>
+            <RouterLink :to="`/products/${product.id}`" class="no-underline">
+              <h3
+                class="mt-3 line-clamp-2 min-h-[56px] text-lg font-bold text-slate-500 transition group-hover:text-primary-600"
+              >
+                {{ product.name }}
+              </h3>
+            </RouterLink>
+
+            <!-- Rating -->
+
+            <div class="mt-4 flex items-center justify-between">
+              <div
+                class="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700"
+              >
+                ⭐ {{ product.rating }}
+              </div>
+
+              <span
+                v-if="product.inStock"
+                class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700"
+              >
+                In Stock
+              </span>
+
+              <span
+                v-else
+                class="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700"
+              >
+                Sold Out
+              </span>
+            </div>
 
             <!-- Price -->
 
-            <div class="mt-4 flex items-end justify-between">
+            <div class="mt-6 flex items-end justify-between">
               <div>
-                <span class="text-2xl font-bold text-accent-600">
+                <div class="text-xl font-black text-primary-700">
                   {{ formatCurrency(product.price) }}
-                </span>
+                </div>
 
-                <p class="text-xs text-slate-400 line-through">
-                  {{ formatCurrency(product.price * 1.2) }}
-                </p>
+                <div class="text-sm text-slate-400 line-through">
+                  {{ formatCurrency(product.price * 1.18) }}
+                </div>
+              </div>
+
+              <div class="text-xs font-semibold text-green-600">
+                Free Delivery
               </div>
             </div>
 
-            <!-- Buttons -->
+            <!-- Buy Now -->
 
-            <!-- <div class="mt-5 grid grid-cols-2 gap-3">
+            <button
+              @click="buyNow(product)"
+              :disabled="!product.inStock"
+              class="mt-6 w-full rounded-2xl bg-cyan-500 py-3 font-bold text-white transition hover:bg-cyan-400 hover:scale-[1.02] hover:shadow-xl disabled:bg-slate-300"
+            >
+              ⚡ Buy Now
+            </button>
+
+            <!-- Bottom Buttons -->
+
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <button
                 @click="addToCart(product)"
                 :disabled="!product.inStock"
-                class="rounded-lg bg-accent-600 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-700"
+                class="rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 py-3 text-sm font-semibold text-white transition hover:from-cyan-300 hover:to-blue-500 disabled:bg-slate-300"
               >
-                {{
-                  cart.isInCart(product.id)
-                    ? "✓ In Cart"
-                    : product.inStock
-                      ? "Add to Cart"
-                      : "Sold Out"
-                }}
+                {{ cart.isInCart(product.id) ? "✓ In Cart" : "Add To Cart" }}
               </button>
 
               <RouterLink
-                :to="`/products/₹{product.id}`"
-                class="rounded-lg border border-slate-300 py-2.5 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-accent-600 hover:text-accent-600"
+                :to="`/products/${product.id}`"
+                class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-primary-600 hover:text-primary-600"
               >
-                View
+                Details
               </RouterLink>
-            </div> -->
-            <div class="mt-5 space-y-3">
-              <!-- Buy Now -->
-
-              <button
-                @click="buyNow(product)"
-                :disabled="!product.inStock"
-                class="w-full rounded-lg bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:bg-gray-300"
-              >
-                ⚡ Buy Now
-              </button>
-
-              <!-- Bottom Buttons -->
-
-              <div class="grid grid-cols-2 gap-3">
-                <button
-                  @click="addToCart(product)"
-                  :disabled="!product.inStock"
-                  class="rounded-lg bg-accent-600 py-2.5 text-sm font-semibold text-white transition hover:bg-accent-700"
-                >
-                  {{
-                    cart.isInCart(product.id)
-                      ? "✓ In Cart"
-                      : product.inStock
-                        ? "Add to Cart"
-                        : "Sold Out"
-                  }}
-                </button>
-
-                <RouterLink
-                  :to="`/products/${product.id}`"
-                  class="rounded-lg border border-slate-300 py-2.5 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-accent-600 hover:text-accent-600"
-                >
-                  View Details
-                </RouterLink>
-              </div>
             </div>
           </div>
         </article>
       </div>
 
       <!-- Mobile Button -->
+    </section>
+    <!-- ===================================================== -->
+    <!-- MEGA SALE BANNER -->
+    <!-- ===================================================== -->
 
-      <div class="text-center md:hidden">
-        <RouterLink
-          to="/products"
-          class="inline-flex rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white no-underline transition hover:bg-primary-700"
-        >
-          View All Products
-        </RouterLink>
+    <section
+      class="overflow-hidden rounded-[32px] bg-gradient-to-r from-primary-700 via-primary-600 to-cyan-500"
+    >
+      <div class="grid items-center gap-8 px-8 py-12 lg:grid-cols-2 lg:px-16">
+        <div>
+          <span
+            class="rounded-full bg-white/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-white"
+          >
+            Limited Time Offer
+          </span>
+
+          <h2 class="mt-6 text-5xl font-black text-white">Up To 50% OFF</h2>
+
+          <p class="mt-5 max-w-lg text-lg leading-8 text-blue-100">
+            Grab your favourite products before the offer ends.
+          </p>
+
+          <RouterLink
+            to="/products"
+            class="mt-8 inline-flex rounded-2xl bg-white px-8 py-4 font-bold text-primary-700 no-underline transition hover:scale-105"
+          >
+            Shop Deals →
+          </RouterLink>
+        </div>
+
+        <div class="hidden justify-center lg:flex">
+          <div class="rounded-[30px] bg-white/10 p-10 backdrop-blur-xl">
+            <div class="grid grid-cols-2 gap-8 text-center text-white">
+              <div>
+                <div class="text-4xl font-black">5K+</div>
+
+                <p class="text-sm uppercase tracking-widest">Products</p>
+              </div>
+
+              <div>
+                <div class="text-4xl font-black">25K+</div>
+
+                <p class="text-sm uppercase tracking-widest">Customers</p>
+              </div>
+
+              <div>
+                <div class="text-4xl font-black">4.9</div>
+
+                <p class="text-sm uppercase tracking-widest">Rating</p>
+              </div>
+
+              <div>
+                <div class="text-4xl font-black">24×7</div>
+
+                <p class="text-sm uppercase tracking-widest">Support</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-    <!-- ================= WHY CHOOSE NEXCART ================= -->
 
-    <section class="space-y-6">
-      <!-- Heading -->
+    <!-- ===================================================== -->
+    <!-- WHY CHOOSE US -->
+    <!-- ===================================================== -->
 
+    <section class="py-16">
       <div class="text-center">
         <span
-          class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-600"
+          class="rounded-full bg-primary-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-primary-700"
         >
           Why Choose Us
         </span>
 
-        <h2 class="mt-2 text-2xl md:text-3xl font-bold text-slate-900">
+        <h2 class="mt-5 text-4xl font-black text-slate-500">
           Shopping Made Better
         </h2>
 
-        <p class="mx-auto mt-3 max-w-2xl text-sm text-slate-500 md:text-base">
-          Everything you need for a secure, fast and enjoyable shopping
-          experience.
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-500">
+          We provide premium shopping experience from purchase to delivery.
         </p>
       </div>
 
-      <!-- Cards -->
-
-      <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div class="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
         <div
-          class="group rounded-2xl bg-white p-5 text-center shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          class="group rounded-[28px] bg-white p-8 text-center shadow-lg transition hover:-translate-y-2 hover:shadow-2xl"
         >
-          <div
-            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-3xl transition group-hover:scale-110"
-          >
-            🚚
-          </div>
-
-          <h3 class="mt-4 text-base font-semibold text-slate-900">
-            Fast Delivery
-          </h3>
-
-          <p class="mt-2 text-sm text-slate-500">
-            Free shipping on eligible orders.
-          </p>
+          <div class="mx-auto text-5xl">🚚</div>
+          <h3 class="mt-6 text-xl font-bold">Fast Delivery</h3>
+          <p class="mt-3 text-slate-500">Free shipping on eligible orders.</p>
         </div>
 
         <div
-          class="group rounded-2xl bg-white p-5 text-center shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          class="group rounded-[28px] bg-white p-8 text-center shadow-lg transition hover:-translate-y-2 hover:shadow-2xl"
         >
-          <div
-            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-3xl transition group-hover:scale-110"
-          >
-            🔒
-          </div>
-
-          <h3 class="mt-4 text-base font-semibold">Secure Payment</h3>
-
-          <p class="mt-2 text-sm text-slate-500">
-            Safe checkout using trusted payment methods.
-          </p>
+          <div class="mx-auto text-5xl">🔒</div>
+          <h3 class="mt-6 text-xl font-bold">Secure Payments</h3>
+          <p class="mt-3 text-slate-500">Trusted payment gateways.</p>
         </div>
 
         <div
-          class="group rounded-2xl bg-white p-5 text-center shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          class="group rounded-[28px] bg-white p-8 text-center shadow-lg transition hover:-translate-y-2 hover:shadow-2xl"
         >
-          <div
-            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-3xl transition group-hover:scale-110"
-          >
-            ↩️
-          </div>
-
-          <h3 class="mt-4 text-base font-semibold">Easy Returns</h3>
-
-          <p class="mt-2 text-sm text-slate-500">
-            Hassle-free return policy within 30 days.
-          </p>
+          <div class="mx-auto text-5xl">↩️</div>
+          <h3 class="mt-6 text-xl font-bold">Easy Returns</h3>
+          <p class="mt-3 text-slate-500">Hassle-free 30-day returns.</p>
         </div>
 
         <div
-          class="group rounded-2xl bg-white p-5 text-center shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          class="group rounded-[28px] bg-white p-8 text-center shadow-lg transition hover:-translate-y-2 hover:shadow-2xl"
         >
-          <div
-            class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-3xl transition group-hover:scale-110"
-          >
-            💬
-          </div>
-
-          <h3 class="mt-4 text-base font-semibold">24×7 Support</h3>
-
-          <p class="mt-2 text-sm text-slate-500">
-            Friendly customer support whenever you need it.
-          </p>
+          <div class="mx-auto text-5xl">💬</div>
+          <h3 class="mt-6 text-xl font-bold">24×7 Support</h3>
+          <p class="mt-3 text-slate-500">Friendly customer support anytime.</p>
         </div>
       </div>
     </section>
 
-    <!-- ================= NEWSLETTER ================= -->
+    <!-- ===================================================== -->
+    <!-- NEWSLETTER -->
+    <!-- ===================================================== -->
 
-    <section
-      class="overflow-hidden rounded-2xl bg-gradient-to-r from-primary-700 to-primary-600"
-    >
-      <div class="grid items-center gap-8 px-6 py-8 md:grid-cols-2 lg:px-10">
-        <!-- Left -->
-
+    <section class="overflow-hidden rounded-[32px] bg-white shadow-xl">
+      <div class="grid items-center gap-10 px-8 py-12 lg:grid-cols-2 lg:px-16">
         <div>
           <span
-            class="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-white"
+            class="rounded-full bg-primary-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.35em] text-primary-700"
           >
             Newsletter
           </span>
 
-          <h2 class="mt-4 text-2xl md:text-3xl font-bold text-white">
-            Never Miss Our Best Deals
-          </h2>
+          <h2 class="mt-6 text-4xl font-black text-slate-500">Stay Updated</h2>
 
-          <p class="mt-3 text-sm leading-6 text-primary-100">
-            Subscribe to receive exclusive offers, new arrivals and special
-            discounts.
+          <p class="mt-5 text-lg text-slate-500">
+            Subscribe for exclusive offers and new arrivals.
           </p>
         </div>
 
-        <!-- Right -->
-
-        <div class="flex flex-col gap-3 sm:flex-row">
+        <div class="flex flex-col gap-4 sm:flex-row">
           <input
             type="email"
             placeholder="Enter your email"
-            class="flex-1 rounded-xl border border-white/20 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300"
+            class="flex-1 rounded-2xl border border-slate-300 px-5 py-4 outline-none focus:border-primary-600"
           />
 
           <button
-            class="rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-black"
+            class="rounded-2xl bg-primary-600 px-8 py-4 font-semibold text-white transition hover:bg-primary-700"
           >
             Subscribe
           </button>
@@ -684,29 +802,88 @@ onBeforeUnmount(() => {
       </div>
     </section>
 
-    <!-- ================= FINAL CTA ================= -->
+    <!-- ===================================================== -->
+    <!-- FINAL CTA -->
+    <!-- ===================================================== -->
 
-    <section class="rounded-2xl bg-white p-8 shadow-card">
-      <div
-        class="flex flex-col items-center justify-between gap-6 text-center lg:flex-row lg:text-left"
+    <section class="rounded-[32px] bg-slate-900 px-8 py-14 text-center">
+      <h2 class="text-4xl font-black text-white">Ready To Start Shopping?</h2>
+
+      <p class="mx-auto mt-5 max-w-2xl text-lg text-slate-300">
+        Discover thousands of premium products with secure checkout and fast
+        delivery.
+      </p>
+
+      <RouterLink
+        to="/products"
+        class="mt-8 inline-flex rounded-2xl bg-primary-600 px-10 py-4 font-bold text-white no-underline transition hover:bg-primary-700"
       >
-        <div>
-          <h2 class="text-2xl font-bold text-slate-900">
-            Ready to Start Shopping?
-          </h2>
-
-          <p class="mt-2 text-sm text-slate-500">
-            Discover premium products at unbeatable prices with NexCart.
-          </p>
-        </div>
-
-        <RouterLink
-          to="/products"
-          class="rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white no-underline transition hover:bg-primary-700"
-        >
-          Explore Products →
-        </RouterLink>
-      </div>
+        Explore Products →
+      </RouterLink>
     </section>
   </div>
 </template>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.45s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(25px);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+img {
+  user-select: none;
+}
+
+button,
+a {
+  transition: all 0.3s ease;
+}
+
+section {
+  animation: fadeUp 0.6s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}
+</style>

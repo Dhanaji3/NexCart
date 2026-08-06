@@ -15,10 +15,17 @@ const { products, loading, error, getAll: fetchProductsApi } = useProductsApi();
 
 const { categories, getAll: fetchCategoriesApi } = useCategoriesApi();
 
-const searchQuery = ref("");
+const searchQuery = ref((route.query.search as string) || "");
 const selectedCategory = ref((route.query.category as string) || "");
 
 const sortBy = ref<"rating" | "price-asc" | "price-desc" | "name">("rating");
+
+watch(
+  () => route.query.search,
+  (value) => {
+    searchQuery.value = (value as string) || "";
+  },
+);
 
 async function fetchProducts() {
   await fetchProductsApi({
@@ -82,93 +89,119 @@ function buyNow(product: Product) {
   router.push("/checkout");
 }
 </script>
-
 <template>
-  <div class="space-y-8">
+  <div class="space-y-10">
     <!-- ===================================================== -->
-    <!-- HERO -->
-    <!-- ===================================================== -->
+    <!-- ========================================================= -->
+    <!-- PREMIUM PRODUCTS HERO -->
+    <!-- ========================================================= -->
 
     <section
-      class="overflow-hidden rounded-3xl bg-gradient-to-r from-primary-950 via-primary-900 to-primary-800 text-white shadow-xl"
+      class="relative overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-950 via-[#18254A] to-[#2B348C] border border-white/5 shadow-2xl"
     >
+      <!-- Glow -->
+
       <div
-        class="grid items-center gap-8 px-6 py-8 md:grid-cols-[2fr_1fr] lg:px-10"
+        class="absolute -top-28 -right-28 h-80 w-80 rounded-full bg-cyan-500/20 blur-[120px]"
+      />
+
+      <div
+        class="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-blue-600/20 blur-[120px]"
+      />
+
+      <!-- Grid -->
+
+      <div
+        class="relative grid items-center gap-8 lg:grid-cols-[2fr_360px] px-8 py-10 lg:px-14"
       >
+        <!-- LEFT -->
+
         <div>
           <span
-            class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em]"
+            class="inline-flex rounded-full bg-white/10 border border-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300"
           >
-            NexCart Store
+            Premium Store
           </span>
 
-          <h1 class="mt-5 text-3xl font-bold md:text-4xl">
-            Discover Amazing Products
+          <h1
+            class="mt-5 text-4xl lg:text-5xl font-black tracking-tight text-white"
+          >
+            Explore Premium Products
           </h1>
 
-          <p
-            class="mt-4 max-w-xl text-sm leading-7 text-slate-200 md:text-base"
-          >
-            Shop premium electronics, fashion, home essentials, accessories and
-            much more. Fast delivery, secure payment and trusted quality.
+          <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-300">
+            Discover carefully selected products with premium quality,
+            lightning-fast delivery and secure checkout.
           </p>
 
-          <div class="mt-8 flex flex-wrap gap-3">
+          <!-- Buttons -->
+
+          <div class="mt-8 flex flex-wrap gap-4">
             <RouterLink
               to="/cart"
-              class="rounded-xl bg-accent-500 px-6 py-3 font-semibold text-white no-underline transition hover:bg-accent-600"
+              class="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-7 py-3 font-semibold text-white no-underline transition hover:scale-105"
             >
               View Cart
             </RouterLink>
 
             <RouterLink
               to="/wishlist"
-              class="rounded-xl border border-white/20 px-6 py-3 font-semibold text-white no-underline transition hover:bg-white/10"
+              class="rounded-2xl border border-white/15 bg-white/5 px-7 py-3 font-semibold text-white no-underline backdrop-blur transition hover:bg-white/10"
             >
               Wishlist
             </RouterLink>
           </div>
         </div>
 
-        <!-- Right -->
+        <!-- RIGHT -->
 
-        <div class="hidden md:flex justify-center">
-          <div class="rounded-3xl bg-white/10 p-8 backdrop-blur">
-            <div class="grid grid-cols-2 gap-6 text-center">
+        <div class="hidden lg:block">
+          <div
+            class="rounded-[30px] border border-white/10 bg-white/10 backdrop-blur-xl p-8"
+          >
+            <div class="grid grid-cols-2 gap-8">
               <div>
-                <h3 class="text-3xl font-bold">
+                <div class="text-4xl font-black text-white">
                   {{ products.length }}
-                </h3>
+                </div>
 
-                <p class="mt-1 text-xs uppercase tracking-wider text-slate-300">
+                <div
+                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                >
                   Products
-                </p>
+                </div>
               </div>
 
               <div>
-                <h3 class="text-3xl font-bold">
+                <div class="text-4xl font-black text-white">
                   {{ categories.length }}
-                </h3>
+                </div>
 
-                <p class="mt-1 text-xs uppercase tracking-wider text-slate-300">
+                <div
+                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                >
                   Categories
-                </p>
+                </div>
               </div>
 
               <div>
-                <h3 class="text-3xl font-bold">4.9</h3>
+                <div class="text-4xl font-black text-white">4.9</div>
 
-                <p class="mt-1 text-xs uppercase tracking-wider text-slate-300">
+                <div
+                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                >
                   Rating
-                </p>
+                </div>
               </div>
 
               <div>
-                <h3 class="text-3xl font-bold">24/7</h3>
+                <div class="text-4xl font-black text-white">24×7</div>
 
-                <p class="mt-1 text-xs uppercase tracking-wider text-slate-300">
+                <div
+                  class="mt-2 text-xs uppercase tracking-widest text-slate-300"
+                >
                   Support
-                </p>
+                </div>
               </div>
             </div>
           </div>
@@ -176,35 +209,46 @@ function buyNow(product: Product) {
       </div>
     </section>
 
-    <!-- ===================================================== -->
-    <!-- FILTERS -->
-    <!-- ===================================================== -->
+    <!-- ========================================================= -->
+    <!-- PREMIUM FILTER BAR -->
+    <!-- ========================================================= -->
 
-    <section class="rounded-3xl bg-white p-6 shadow-card">
-      <div class="grid gap-5 lg:grid-cols-[2fr_1fr_1fr]">
-        <!-- Search -->
+    <section
+      class="sticky top-24 z-30 rounded-[28px] border border-white/10 bg-slate-900/80 backdrop-blur-2xl shadow-[0_15px_40px_rgba(0,0,0,.35)] px-6 py-6"
+    >
+      <div class="grid gap-5 xl:grid-cols-[2fr_1fr_1fr_auto]">
+        <!-- ===================================== -->
+        <!-- SEARCH -->
+        <!-- ===================================== -->
 
         <div class="relative">
-          <span
-            class="absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400"
+          <svg
+            class="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
           >
-            🔍
-          </span>
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
 
           <input
             :value="searchQuery"
             @input="onSearchInput(($event.target as HTMLInputElement).value)"
             type="text"
-            placeholder="Search products..."
-            class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-12 pr-4 outline-none transition-all focus:border-primary-500 focus:bg-white"
+            placeholder="Search premium products..."
+            class="w-full rounded-2xl border border-white/10 bg-slate-800 py-4 pl-14 pr-5 text-white placeholder:text-slate-500 outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
           />
         </div>
 
-        <!-- Category -->
+        <!-- ===================================== -->
+        <!-- CATEGORY -->
+        <!-- ===================================== -->
 
         <select
           v-model="selectedCategory"
-          class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-primary-500 focus:bg-white"
+          class="rounded-2xl border border-white/10 bg-slate-800 px-5 py-4 text-white outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
         >
           <option value="">All Categories</option>
 
@@ -213,37 +257,113 @@ function buyNow(product: Product) {
           </option>
         </select>
 
-        <!-- Sort -->
+        <!-- ===================================== -->
+        <!-- SORT -->
+        <!-- ===================================== -->
 
         <select
           v-model="sortBy"
-          class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-primary-500 focus:bg-white"
+          class="rounded-2xl border border-white/10 bg-slate-800 px-5 py-4 text-white outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/20"
         >
           <option value="rating">⭐ Top Rated</option>
 
-          <option value="price-asc">💰 Price : Low → High</option>
+          <option value="price-asc">₹ Price Low → High</option>
 
-          <option value="price-desc">💰 Price : High → Low</option>
+          <option value="price-desc">₹ Price High → Low</option>
 
-          <option value="name">🔤 Name (A-Z)</option>
+          <option value="name">A → Z</option>
         </select>
-      </div>
 
-      <div
-        class="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-5"
-      >
-        <div class="text-sm text-slate-500">
-          Showing
-          <span class="font-semibold text-slate-900">
-            {{ products.length }}
-          </span>
-          products
-        </div>
+        <!-- ===================================== -->
+        <!-- RESET -->
+        <!-- ===================================== -->
 
         <button
           v-if="searchQuery || selectedCategory"
           @click="resetFilters"
-          class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold transition hover:border-primary-600 hover:text-primary-600"
+          class="rounded-2xl bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 font-semibold text-white transition hover:scale-105"
+        >
+          Reset
+        </button>
+      </div>
+
+      <!-- ===================================== -->
+      <!-- BOTTOM -->
+      <!-- ===================================== -->
+
+      <div
+        class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5"
+      >
+        <!-- Product Count -->
+
+        <div class="text-slate-400">
+          Showing
+
+          <span class="font-bold text-white">
+            {{ filteredProducts.length }}
+          </span>
+
+          Premium Products
+        </div>
+
+        <!-- Selected Category -->
+
+        <div
+          class="rounded-full bg-primary-500/20 px-4 py-2 text-sm font-semibold text-primary-300"
+        >
+          {{ selectedCategory || "All Categories" }}
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- LOADING -->
+    <!-- ========================================================= -->
+
+    <section
+      v-if="loading"
+      class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+    >
+      <div
+        v-for="i in 8"
+        :key="i"
+        class="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-lg"
+      >
+        <div class="h-[260px] animate-pulse bg-slate-200"></div>
+
+        <div class="space-y-4 p-6">
+          <div class="h-4 w-24 rounded bg-slate-200 animate-pulse"></div>
+
+          <div class="h-6 rounded bg-slate-200 animate-pulse"></div>
+
+          <div class="h-6 w-2/3 rounded bg-slate-200 animate-pulse"></div>
+
+          <div class="h-10 rounded-xl bg-slate-200 animate-pulse"></div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="h-11 rounded-xl bg-slate-200 animate-pulse"></div>
+
+            <div class="h-11 rounded-xl bg-slate-200 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      v-if="!loading && !error && paginatedProducts.length === 0"
+      class="rounded-[32px] bg-white py-24 shadow-xl"
+    >
+      <div class="text-center">
+        <div class="text-7xl">📦</div>
+
+        <h2 class="mt-6 text-4xl font-black">No Products Found</h2>
+
+        <p class="mt-4 text-lg text-slate-500">
+          Try changing your filters or search keyword.
+        </p>
+
+        <button
+          @click="resetFilters"
+          class="mt-8 rounded-2xl bg-primary-600 px-8 py-4 font-semibold text-white hover:bg-primary-700"
         >
           Reset Filters
         </button>
@@ -251,153 +371,139 @@ function buyNow(product: Product) {
     </section>
 
     <!-- ===================================================== -->
-    <!-- LOADING -->
-    <!-- ===================================================== -->
-
-    <div
-      v-if="loading"
-      class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-    >
-      <div
-        v-for="i in 8"
-        :key="i"
-        class="overflow-hidden rounded-2xl bg-white shadow-card"
-      >
-        <div class="h-60 animate-pulse bg-slate-200"></div>
-
-        <div class="space-y-3 p-5">
-          <div class="h-3 w-20 animate-pulse rounded bg-slate-200"></div>
-
-          <div class="h-5 w-full animate-pulse rounded bg-slate-200"></div>
-
-          <div class="h-5 w-2/3 animate-pulse rounded bg-slate-200"></div>
-
-          <div class="h-4 w-24 animate-pulse rounded bg-slate-200"></div>
-
-          <div class="h-10 animate-pulse rounded-xl bg-slate-200"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===================================================== -->
     <!-- ERROR -->
     <!-- ===================================================== -->
+    <section v-if="error" class="rounded-[32px] bg-white py-24 shadow-xl">
+      <div class="text-center">
+        <div class="text-7xl">⚠️</div>
 
-    <div
-      v-else-if="error"
-      class="rounded-3xl bg-white py-20 text-center shadow-card"
-    >
-      <div class="mx-auto max-w-md">
-        <div class="text-6xl">😕</div>
+        <h2 class="mt-6 text-4xl font-black">Something went wrong</h2>
 
-        <h2 class="mt-5 text-2xl font-bold text-slate-900">
-          Something went wrong
-        </h2>
-
-        <p class="mt-3 text-slate-500">
+        <p class="mt-4 text-lg text-slate-500">
           {{ error }}
         </p>
 
         <button
           @click="fetchProducts"
-          class="mt-8 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
+          class="mt-8 rounded-2xl bg-primary-600 px-8 py-4 font-semibold text-white hover:bg-primary-700"
         >
           Try Again
         </button>
       </div>
-    </div>
+    </section>
 
     <!-- ===================================================== -->
     <!-- PRODUCT GRID -->
     <!-- ===================================================== -->
 
-    <div
-      v-else
-      class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-    >
+    <section v-else class="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+      <!-- ===================================================== -->
       <article
-        v-for="product in products"
+        v-for="product in paginatedProducts"
         :key="product.id"
-        class="group overflow-hidden rounded-2xl bg-white shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        class="group overflow-hidden rounded-[30px] bg-white border border-slate-200 transition-all duration-500 hover:-translate-y-2 hover:border-primary-300 hover:shadow-[0_25px_60px_rgba(37,99,235,.18)]"
       >
-        <!-- IMAGE -->
+        <!-- ====================================== -->
+        <!-- IMAGE AREA -->
+        <!-- ====================================== -->
 
-        <div class="relative overflow-hidden bg-slate-100">
-          <!-- SALE -->
+        <div
+          class="relative flex h-[260px] items-center justify-center overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100"
+        >
+          <!-- Sale -->
 
-          <span
-            class="absolute left-4 top-4 z-20 rounded-full bg-red-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white"
+          <div
+            class="absolute left-4 top-4 z-20 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white"
           >
-            Sale
-          </span>
+            SALE
+          </div>
 
-          <!-- WISHLIST -->
+          <!-- Wishlist -->
 
           <button
             @click.stop="cart.toggleWishlist(product)"
-            class="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-lg transition hover:scale-110 hover:bg-red-500 hover:text-white"
+            class="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition-all duration-300 hover:scale-110"
           >
-            <span v-if="cart.isInWishlist(product.id)"> ❤️ </span>
+            <span
+              v-if="cart.isInWishlist(product.id)"
+              class="text-red-500 text-xl"
+            >
+              ❤️
+            </span>
 
-            <span v-else> 🤍 </span>
+            <span v-else class="text-slate-500 text-xl"> ♡ </span>
           </button>
 
-          <RouterLink :to="`/products/${product.id}`" class="block">
+          <!-- Image -->
+
+          <RouterLink
+            :to="`/products/${product.id}`"
+            class="flex h-full w-full items-center justify-center"
+          >
             <img
               :src="product.image"
               :alt="product.name"
               loading="lazy"
-              class="mx-auto h-64 w-full object-contain p-6 transition duration-500 group-hover:scale-110"
+              class="h-[190px] object-contain transition-all duration-500 group-hover:scale-110"
             />
           </RouterLink>
         </div>
 
+        <!-- ====================================== -->
         <!-- CONTENT -->
+        <!-- ====================================== -->
 
-        <div class="p-5">
-          <!-- CATEGORY -->
+        <div class="p-6">
+          <!-- Category -->
 
-          <p
-            class="text-xs font-semibold uppercase tracking-[0.25em] text-primary-600"
+          <div
+            class="text-xs font-bold uppercase tracking-[0.3em] text-primary-600"
           >
             {{ product.category }}
-          </p>
+          </div>
 
-          <!-- NAME -->
+          <!-- Product Name -->
 
           <RouterLink :to="`/products/${product.id}`" class="no-underline">
             <h3
-              class="mt-3 line-clamp-2 min-h-[56px] text-lg font-semibold text-slate-900 transition group-hover:text-primary-600"
+              class="mt-3 min-h-[58px] line-clamp-2 text-lg font-bold leading-7 text-slate-900 transition group-hover:text-primary-600"
             >
               {{ product.name }}
             </h3>
           </RouterLink>
 
-          <!-- RATING -->
+          <!-- Rating -->
 
-          <div class="mt-4 flex items-center justify-between">
-            <div
-              class="rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700"
-            >
-              ⭐ {{ product.rating }}
+          <div class="mt-5 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-yellow-500"> ⭐⭐⭐⭐⭐ </span>
+
+              <span class="font-semibold text-slate-700">
+                {{ product.rating }}
+              </span>
             </div>
 
-            <div class="text-sm text-slate-400">
-              {{ product.reviews }}
-              Reviews
-            </div>
+            <span class="text-sm text-slate-400"> 250+ </span>
           </div>
 
-          <!-- PRICE -->
+          <!-- Price -->
 
-          <div class="mt-5 flex items-end justify-between">
+          <div class="mt-6 flex items-end justify-between">
             <div>
-              <div class="text-2xl font-bold text-primary-700">
+              <div class="text-3xl font-black text-primary-700">
                 {{ formatCurrency(product.price) }}
               </div>
 
-              <div class="text-sm text-slate-400 line-through">
-                {{ formatCurrency(Math.round(product.price * 1.18)) }}
+              <div class="mt-1 flex items-center gap-2">
+                <span class="text-sm text-slate-400 line-through">
+                  {{ formatCurrency(product.price * 1.25) }}
+                </span>
+
+                <span
+                  class="rounded-full bg-green-100 px-2 py-1 text-[11px] font-bold text-green-700"
+                >
+                  20% OFF
+                </span>
               </div>
             </div>
 
@@ -410,85 +516,136 @@ function buyNow(product: Product) {
 
             <span
               v-else
-              class="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-600"
+              class="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700"
             >
-              Out of Stock
+              Sold Out
             </span>
           </div>
 
-          <!-- ACTIONS -->
+          <!-- ====================================== -->
+          <!-- TRUST BADGES -->
+          <!-- ====================================== -->
 
-          <div class="mt-6 space-y-3">
-            <!-- Buy Now -->
-
-            <button
-              @click="buyNow(product)"
-              :disabled="!product.inStock"
-              class="btn-accent w-full disabled:cursor-not-allowed disabled:bg-slate-300"
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span
+              class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700"
             >
-              ⚡ Buy Now
+              🚚 Free Delivery
+            </span>
+
+            <span
+              class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700"
+            >
+              🔒 Secure
+            </span>
+
+            <span
+              class="inline-flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-xs font-medium text-orange-700"
+            >
+              ⭐ Best Seller
+            </span>
+          </div>
+
+          <!-- ====================================== -->
+          <!-- BUY NOW -->
+          <!-- ====================================== -->
+
+          <button
+            @click="buyNow(product)"
+            :disabled="!product.inStock"
+            class="mt-6 w-full rounded-2xl bg-gradient-to-r from-primary-600 via-blue-600 to-indigo-600 py-3.5 text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            ⚡ Buy Now
+          </button>
+
+          <!-- ====================================== -->
+          <!-- ACTIONS -->
+          <!-- ====================================== -->
+
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button
+              @click="addToCart(product)"
+              :disabled="!product.inStock"
+              class="rounded-xl border border-primary-600 bg-primary-50 py-3 text-sm font-semibold text-primary-700 transition-all hover:bg-primary-600 hover:text-white disabled:opacity-50"
+            >
+              {{ cart.isInCart(product.id) ? "✓ In Cart" : "Add Cart" }}
             </button>
 
-            <!-- Bottom Buttons -->
-
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                @click="addToCart(product)"
-                :disabled="!product.inStock"
-                class="btn-accent disabled:cursor-not-allowed disabled:bg-slate-300"
-              >
-                {{
-                  cart.isInCart(product.id)
-                    ? "✓ In Cart"
-                    : product.inStock
-                      ? "Add to Cart"
-                      : "Sold Out"
-                }}
-              </button>
-
-              <RouterLink
-                :to="`/products/${product.id}`"
-                class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition hover:border-primary-600 hover:text-primary-600"
-              >
-                View Details
-              </RouterLink>
-            </div>
+            <RouterLink
+              :to="`/products/${product.id}`"
+              class="rounded-xl border border-slate-300 py-3 text-center text-sm font-semibold text-slate-700 no-underline transition-all hover:border-primary-600 hover:bg-primary-50 hover:text-primary-700"
+            >
+              Details
+            </RouterLink>
           </div>
         </div>
       </article>
-    </div>
-
-    <!-- ===================================================== -->
-    <!-- EMPTY STATE -->
+    </section>
     <!-- ===================================================== -->
 
-    <div
+    <section
       v-if="!loading && !error && products.length === 0"
-      class="rounded-3xl bg-white py-20 text-center shadow-card"
+      class="rounded-[32px] border border-slate-200 bg-white px-8 py-24 text-center shadow-xl"
     >
-      <div class="mx-auto max-w-lg">
-        <div class="text-7xl">📦</div>
+      <div
+        class="mx-auto flex h-28 w-28 items-center justify-center rounded-full bg-slate-100 text-6xl"
+      >
+        📦
+      </div>
 
-        <h2 class="mt-6 text-3xl font-bold text-slate-900">
-          No Products Found
-        </h2>
+      <h2 class="mt-8 text-4xl font-black text-slate-900">No Products Found</h2>
 
-        <p class="mx-auto mt-4 max-w-md text-slate-500">
-          We couldn't find any products matching your search. Try changing your
-          search keywords or clearing the filters.
-        </p>
+      <p class="mx-auto mt-5 max-w-xl text-lg leading-8 text-slate-500">
+        We couldn't find any products matching your search. Try changing the
+        filters or browse all categories.
+      </p>
+
+      <button
+        @click="resetFilters"
+        class="mt-10 rounded-2xl bg-primary-600 px-8 py-4 font-semibold text-white transition hover:bg-primary-700"
+      >
+        Reset Filters
+      </button>
+    </section>
+    <!-- ===================================================== -->
+    <!-- PAGINATION -->
+    <!-- ===================================================== -->
+
+    <section v-if="totalPages > 1" class="flex justify-center py-12">
+      <div class="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-xl">
+        <button
+          @click="previousPage"
+          :disabled="currentPage === 1"
+          class="rounded-xl px-5 py-3 font-semibold hover:bg-slate-100 disabled:opacity-40"
+        >
+          ←
+        </button>
 
         <button
-          @click="resetFilters"
-          class="mt-8 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
+          v-for="page in totalPages"
+          :key="page"
+          @click="goToPage(page)"
+          class="h-11 w-11 rounded-xl font-semibold transition"
+          :class="
+            page === currentPage
+              ? 'bg-primary-600 text-white'
+              : 'hover:bg-slate-100'
+          "
         >
-          Reset Filters
+          {{ page }}
+        </button>
+
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="rounded-xl px-5 py-3 font-semibold hover:bg-slate-100 disabled:opacity-40"
+        >
+          →
         </button>
       </div>
-    </div>
+    </section>
   </div>
 </template>
-
 <style scoped>
 .line-clamp-2 {
   display: -webkit-box;
@@ -497,35 +654,101 @@ function buyNow(product: Product) {
   overflow: hidden;
 }
 
-.shadow-card {
-  box-shadow:
-    0 10px 30px rgba(15, 23, 42, 0.06),
-    0 4px 10px rgba(15, 23, 42, 0.05);
+article {
+  transition: 0.35s;
 }
 
-.group:hover .shadow-card {
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
-}
-
-button,
-a,
-select,
-input {
-  transition: all 0.25s ease;
-}
-
-input:focus,
-select:focus {
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+article:hover {
+  transform: translateY(-10px);
 }
 
 img {
-  user-select: none;
+  transition: 0.45s;
+}
+
+.group:hover img {
+  transform: scale(1.08);
+}
+
+button {
+  transition: 0.3s;
+}
+
+section {
+  animation: fadeUp 0.45s ease;
+}
+
+/* Product Card */
+
+.product-card {
+  transition: all 0.35s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Image */
+
+.product-card img {
+  transition: transform 0.45s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Buy Button */
+
+.buy-btn {
+  transition: all 0.3s ease;
+}
+
+.buy-btn:hover {
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+}
+
+/* Wishlist */
+
+.wishlist-btn:hover {
+  transform: scale(1.12);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
   h1 {
-    font-size: 2rem;
+    font-size: 2.3rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
   }
 }
 </style>
