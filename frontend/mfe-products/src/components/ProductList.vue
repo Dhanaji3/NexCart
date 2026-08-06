@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { computed, ref, onMounted, watch } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useCartStore } from "shared";
 import type { Product } from "shared";
@@ -11,12 +11,25 @@ const route = useRoute();
 const router = useRouter();
 const cart = useCartStore();
 
-const { products, loading, error, getAll: fetchProductsApi } = useProductsApi();
+const {
+  products,
+  loading,
+  error,
+  total,
+  totalPages,
+  getAll: fetchProductsApi,
+} = useProductsApi();
 
 const { categories, getAll: fetchCategoriesApi } = useCategoriesApi();
 
 const searchQuery = ref((route.query.search as string) || "");
 const selectedCategory = ref((route.query.category as string) || "");
+
+const currentPage = ref(1);
+const itemsPerPage = ref(12);
+
+const filteredProducts = computed(() => products.value);
+const paginatedProducts = computed(() => products.value);
 
 const sortBy = ref<"rating" | "price-asc" | "price-desc" | "name">("rating");
 
@@ -32,7 +45,29 @@ async function fetchProducts() {
     search: searchQuery.value || undefined,
     category: selectedCategory.value || undefined,
     sort: sortBy.value,
+    page: currentPage.value,
+    limit: itemsPerPage.value,
   });
+}
+
+function goToPage(page: number) {
+  if (page < 1 || page > totalPages.value || page === currentPage.value) return;
+  currentPage.value = page;
+  fetchProducts();
+}
+
+function previousPage() {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1;
+    fetchProducts();
+  }
+}
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value += 1;
+    fetchProducts();
+  }
 }
 
 async function fetchCategories() {
@@ -50,6 +85,7 @@ onMounted(async () => {
 watch(
   [searchQuery, selectedCategory, sortBy],
   () => {
+    currentPage.value = 1;
     fetchProducts();
   },
   { debounce: 300 } as any,
@@ -73,6 +109,7 @@ function resetFilters() {
   searchQuery.value = "";
   selectedCategory.value = "";
   sortBy.value = "rating";
+  currentPage.value = 1;
 
   fetchProducts();
 }
