@@ -61,75 +61,72 @@ function formatPrice(value: number | string) {
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div class="mx-auto max-w-300 px-4 py-6 space-y-6">
     <!-- ========================================== -->
     <!-- HERO -->
     <!-- ========================================== -->
 
     <section
-      class="overflow-hidden rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 text-white shadow-xl"
+      class="overflow-hidden rounded-3xl bg-[#0c1427]/95 text-white shadow-xl shadow-black/20"
     >
       <div
-        class="grid items-center gap-8 px-6 py-8 md:grid-cols-[2fr_1fr] lg:px-10"
+        class="grid items-center gap-4 px-5 py-5 md:grid-cols-[2fr_1fr] lg:px-8"
       >
         <div>
           <span
-            class="rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em]"
+            class="rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.35em] text-slate-200"
           >
             My Orders
           </span>
 
-          <h1 class="mt-5 text-3xl font-bold md:text-4xl">
+          <h1 class="mt-4 text-2xl font-black md:text-3xl text-white">
             Track Your Purchases
           </h1>
 
-          <p
-            class="mt-4 max-w-xl text-sm leading-7 text-slate-200 md:text-base"
-          >
-            View your complete order history, track deliveries, monitor shipping
-            status, and manage all purchases from one place.
+          <p class="mt-4 max-w-lg text-sm leading-6 text-slate-300 md:text-sm">
+            View your order history, track deliveries, monitor shipment status,
+            and manage all purchases from a single dashboard.
           </p>
 
-          <div class="mt-8 flex flex-wrap gap-4">
+          <div class="mt-6 flex flex-wrap gap-3">
             <RouterLink
               to="/products"
-              class="rounded-xl bg-accent-500 px-6 py-3 font-semibold text-white no-underline transition hover:bg-accent-600"
+              class="inline-flex items-center justify-center rounded-2xl bg-linear-to-r from-blue-600 to-cyan-500 px-5 py-2.5 text-xs font-semibold text-white transition hover:-translate-y-0.5"
             >
               Continue Shopping
             </RouterLink>
           </div>
         </div>
 
-        <!-- Stats -->
-
-        <div class="hidden md:block rounded-3xl bg-white/10 p-6 backdrop-blur">
-          <div class="grid grid-cols-2 gap-5 text-center">
+        <div
+          class="rounded-3xl bg-white/5 p-4 shadow-inner shadow-slate-950/10 backdrop-blur"
+        >
+          <div class="grid grid-cols-2 gap-4 text-center">
             <div>
-              <h3 class="text-3xl font-bold">
-                {{ orders.length }}
-              </h3>
-
-              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
+              <p class="text-[10px] uppercase tracking-[0.35em] text-slate-400">
                 Orders
               </p>
+              <h3 class="mt-3 text-2xl font-black text-white">
+                {{ orders.length }}
+              </h3>
             </div>
 
             <div>
-              <h3 class="text-3xl font-bold">
-                {{ deliveredOrders }}
-              </h3>
-
-              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
+              <p class="text-[10px] uppercase tracking-[0.35em] text-slate-400">
                 Delivered
               </p>
+              <h3 class="mt-3 text-2xl font-black text-white">
+                {{ deliveredOrders }}
+              </h3>
             </div>
 
-            <div class="col-span-2">
-              <h3 class="text-3xl font-bold">{{ formatPrice(totalSpent) }}</h3>
-
-              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
+            <div class="col-span-2 rounded-2xl bg-slate-950/80 p-4">
+              <p class="text-[10px] uppercase tracking-[0.35em] text-slate-400">
                 Total Spent
               </p>
+              <h3 class="mt-2 text-xl font-black text-white">
+                {{ formatPrice(totalSpent) }}
+              </h3>
             </div>
           </div>
         </div>
@@ -140,11 +137,11 @@ function formatPrice(value: number | string) {
     <!-- LOADING -->
     <!-- ========================================== -->
 
-    <div v-if="loading" class="grid gap-6">
+    <div v-if="loading" class="grid gap-5">
       <div
         v-for="i in 4"
         :key="i"
-        class="animate-pulse rounded-3xl bg-white p-6 shadow-card"
+        class="animate-pulse rounded-3xl bg-[#0c1427]/90 p-5 shadow-xl shadow-black/15"
       >
         <div class="mb-5 h-6 w-48 rounded bg-slate-200"></div>
 
@@ -162,22 +159,20 @@ function formatPrice(value: number | string) {
 
     <div
       v-else-if="error"
-      class="rounded-3xl bg-white py-20 text-center shadow-card"
+      class="rounded-3xl bg-[#0c1427]/95 p-8 text-center shadow-xl shadow-black/20"
     >
-      <div class="mx-auto max-w-md">
-        <div class="text-6xl">😕</div>
+      <div class="mx-auto max-w-sm">
+        <div class="text-4xl">😕</div>
 
-        <h2 class="mt-5 text-2xl font-bold text-slate-900">
-          Unable to load orders
-        </h2>
+        <h2 class="mt-4 text-lg font-bold text-white">Unable to load orders</h2>
 
-        <p class="mt-3 text-slate-500">
+        <p class="mt-3 text-slate-300 text-sm">
           {{ error }}
         </p>
 
         <button
           @click="fetchOrders"
-          class="mt-8 rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
+          class="mt-6 rounded-2xl bg-linear-to-r from-blue-600 to-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5"
         >
           Retry
         </button>
@@ -190,21 +185,21 @@ function formatPrice(value: number | string) {
 
     <div
       v-else-if="orders.length === 0"
-      class="rounded-3xl bg-white py-24 text-center shadow-card"
+      class="rounded-3xl bg-[#0c1427]/95 p-8 text-center shadow-xl shadow-black/20"
     >
-      <div class="mx-auto max-w-lg">
-        <div class="text-7xl">📦</div>
+      <div class="mx-auto max-w-sm">
+        <div class="text-5xl">📦</div>
 
-        <h2 class="mt-6 text-3xl font-bold text-slate-900">No Orders Yet</h2>
+        <h2 class="mt-4 text-xl font-bold text-white">No Orders Yet</h2>
 
-        <p class="mx-auto mt-4 max-w-md text-slate-500">
+        <p class="mx-auto mt-3 max-w-sm text-slate-300 text-sm">
           Looks like you haven't placed any orders yet. Start shopping to see
           your order history here.
         </p>
 
         <RouterLink
           to="/products"
-          class="mt-8 inline-flex rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white no-underline transition hover:bg-primary-700"
+          class="mt-6 inline-flex rounded-2xl bg-linear-to-r from-blue-600 to-cyan-500 px-4 py-2 text-sm font-semibold text-white no-underline transition hover:-translate-y-0.5"
         >
           Start Shopping
         </RouterLink>
@@ -215,51 +210,51 @@ function formatPrice(value: number | string) {
     <!-- ORDERS LIST -->
     <!-- ========================================== -->
 
-    <div v-else class="space-y-8">
+    <div v-else class="space-y-6">
       <article
         v-for="order in orders"
         :key="order.id"
-        class="overflow-hidden rounded-3xl bg-white shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
+        class="overflow-hidden rounded-3xl border border-white/10 bg-[#0b1220]/90 shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-black/25"
       >
         <!-- ================================= -->
         <!-- ORDER HEADER -->
         <!-- ================================= -->
 
-        <div class="border-b border-slate-100 bg-slate-50 px-6 py-5">
+        <div class="border-b border-white/10 bg-white/5 px-4 py-3">
           <div
-            class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"
+            class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
           >
             <div>
               <p
-                class="text-xs font-semibold uppercase tracking-[0.3em] text-primary-600"
+                class="text-[10px] font-semibold uppercase tracking-[0.35em] text-cyan-300"
               >
                 Order ID
               </p>
 
-              <h3 class="mt-1 text-lg font-bold text-slate-900">
-                #{{ order.id }}
-              </h3>
+              <h3 class="mt-1 text-lg font-bold text-white">#{{ order.id }}</h3>
 
-              <p class="mt-2 text-sm text-slate-500">
+              <p class="mt-2 text-sm text-slate-300">
                 Ordered on
                 {{ formatDate(order.createdAt) }}
               </p>
             </div>
 
-            <div class="flex flex-wrap items-center gap-4">
+            <div class="flex flex-wrap items-center gap-3">
               <span
-                class="rounded-full px-4 py-2 text-sm font-semibold capitalize"
+                class="rounded-full px-3 py-1.5 text-sm font-semibold capitalize"
                 :class="statusClass(order.status)"
               >
                 {{ order.status }}
               </span>
 
               <div class="text-right">
-                <p class="text-xs uppercase tracking-wider text-slate-400">
+                <p
+                  class="text-[10px] uppercase tracking-[0.35em] text-slate-400"
+                >
                   Total
                 </p>
 
-                <h3 class="text-2xl font-bold text-primary-700">
+                <h3 class="text-xl font-bold text-cyan-300">
                   {{ formatPrice(order.total) }}
                 </h3>
               </div>
@@ -271,37 +266,37 @@ function formatPrice(value: number | string) {
         <!-- ORDER ITEMS -->
         <!-- ================================= -->
 
-        <div class="space-y-4 p-6">
+        <div class="space-y-3 p-4">
           <div
             v-for="item in order.items"
             :key="item.product.id"
-            class="flex flex-col gap-4 rounded-2xl border border-slate-100 p-4 transition hover:border-primary-300 hover:bg-slate-50 sm:flex-row sm:items-center"
+            class="flex flex-col gap-3 rounded-3xl border border-white/10 bg-white/5 p-3 transition hover:border-cyan-400/40 hover:bg-white/10 sm:flex-row sm:items-center"
           >
             <!-- IMAGE -->
 
             <img
               :src="item.product.image"
               :alt="item.product.name"
-              class="h-24 w-24 rounded-xl bg-slate-100 object-contain p-3"
+              class="h-20 w-20 rounded-2xl bg-white/5 object-contain p-1.5"
             />
 
             <!-- DETAILS -->
 
             <div class="flex-1">
-              <h4 class="text-lg font-semibold text-slate-900">
+              <h4 class="text-lg font-semibold text-white">
                 {{ item.product.name }}
               </h4>
 
-              <p class="mt-2 text-sm text-slate-500">
+              <p class="mt-2 text-sm text-slate-300">
                 Quantity :
-                <span class="font-semibold">
+                <span class="font-semibold text-white">
                   {{ item.quantity }}
                 </span>
               </p>
 
-              <p class="mt-1 text-sm text-slate-500">
+              <p class="mt-1 text-sm text-slate-300">
                 Unit Price :
-                <span class="font-semibold">
+                <span class="font-semibold text-white">
                   {{ formatPrice(item.product.price) }}
                 </span>
               </p>
@@ -310,11 +305,11 @@ function formatPrice(value: number | string) {
             <!-- PRICE -->
 
             <div class="text-left sm:text-right">
-              <p class="text-xs uppercase tracking-wider text-slate-400">
+              <p class="text-[10px] uppercase tracking-[0.35em] text-slate-400">
                 Subtotal
               </p>
 
-              <h4 class="mt-1 text-xl font-bold text-slate-900">
+              <h4 class="mt-1 text-xl font-bold text-white">
                 {{ formatPrice(item.product.price * item.quantity) }}
               </h4>
             </div>
@@ -325,27 +320,31 @@ function formatPrice(value: number | string) {
         <!-- ORDER SUMMARY -->
         <!-- ================================= -->
 
-        <div class="border-t border-slate-100 bg-slate-50 px-6 py-5">
+        <div class="border-t border-white/10 bg-white/5 px-4 py-3">
           <div
-            class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"
+            class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
           >
-            <div class="flex flex-wrap gap-6">
+            <div class="flex flex-wrap gap-4">
               <div>
-                <p class="text-xs uppercase tracking-wider text-slate-400">
+                <p
+                  class="text-[10px] uppercase tracking-[0.35em] text-slate-400"
+                >
                   Items
                 </p>
 
-                <h4 class="font-semibold text-slate-900">
+                <h4 class="font-semibold text-white">
                   {{ order.items.length }}
                 </h4>
               </div>
 
               <div>
-                <p class="text-xs uppercase tracking-wider text-slate-400">
+                <p
+                  class="text-[10px] uppercase tracking-[0.35em] text-slate-400"
+                >
                   Status
                 </p>
 
-                <h4 class="font-semibold capitalize text-slate-900">
+                <h4 class="font-semibold capitalize text-white">
                   {{ order.status }}
                 </h4>
               </div>
@@ -354,14 +353,14 @@ function formatPrice(value: number | string) {
             <div class="flex flex-wrap gap-3">
               <RouterLink
                 :to="`/orders/${order.id}`"
-                class="rounded-xl border border-primary-600 px-5 py-3 text-sm font-semibold text-primary-600 no-underline transition hover:bg-primary-600 hover:text-white"
+                class="rounded-2xl border border-cyan-400/70 px-4 py-2.5 text-sm font-semibold text-cyan-300 transition hover:bg-cyan-500 hover:text-white"
               >
                 View Details
               </RouterLink>
 
               <RouterLink
                 to="/products"
-                class="rounded-xl bg-primary-600 px-5 py-3 text-sm font-semibold text-white no-underline transition hover:bg-primary-700"
+                class="rounded-2xl bg-linear-to-r from-blue-600 to-cyan-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5"
               >
                 Buy Again
               </RouterLink>

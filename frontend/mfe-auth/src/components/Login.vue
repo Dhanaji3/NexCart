@@ -29,18 +29,23 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="flex justify-center items-center min-h-[60vh]">
-    <div class="bg-white rounded-xl p-8 w-full max-w-md shadow-elevated">
-      <h2 class="text-2xl font-bold text-slate-900 mb-1">Sign In</h2>
-      <p class="text-slate-500 text-sm mb-6">
-        Welcome back! Please sign in to your account.
-      </p>
+  <div class="min-h-[70vh] bg-slate-950 px-4 py-8 text-slate-100">
+    <div
+      class="mx-auto w-full max-w-md rounded-4xl border border-white/10 bg-slate-900/90 p-5 shadow-[0_25px_60px_rgba(15,23,42,0.45)] backdrop-blur-xl"
+    >
+      <div class="mb-5 space-y-2">
+        <p class="text-sm uppercase tracking-[0.3em] text-slate-500">
+          Welcome back
+        </p>
+        <h2 class="text-2xl font-bold text-white">Sign In</h2>
+        <p class="text-slate-400">Access your account and continue shopping.</p>
+      </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-4">
+      <form @submit.prevent="handleLogin" class="space-y-3">
         <div>
           <label
             for="email"
-            class="block mb-1.5 text-sm font-medium text-slate-700"
+            class="mb-2 block text-sm font-medium text-slate-300"
             >Email</label
           >
           <input
@@ -49,13 +54,14 @@ async function handleLogin() {
             type="email"
             placeholder="Enter your email"
             required
-            class="input"
+            class="auth-input"
           />
         </div>
+
         <div>
           <label
             for="password"
-            class="block mb-1.5 text-sm font-medium text-slate-700"
+            class="mb-2 block text-sm font-medium text-slate-300"
             >Password</label
           >
           <input
@@ -64,13 +70,13 @@ async function handleLogin() {
             type="password"
             placeholder="Enter your password"
             required
-            class="input"
+            class="auth-input"
           />
         </div>
 
         <div
           v-if="error"
-          class="text-danger-600 text-sm p-3 bg-danger-50 rounded-lg"
+          class="rounded-3xl bg-rose-500/10 p-3 text-sm text-rose-200 ring-1 ring-rose-400/20"
         >
           {{ error }}
         </div>
@@ -78,27 +84,47 @@ async function handleLogin() {
         <button
           type="submit"
           :disabled="loading"
-          class="w-full btn-primary py-3 text-base"
+          class="w-full rounded-3xl bg-accent-500 px-5 py-2.5 text-base font-semibold text-white shadow-lg shadow-accent-500/20 transition hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {{ loading ? "Signing in..." : "Sign In" }}
         </button>
       </form>
 
-      <p class="text-center mt-6 text-slate-500 text-sm">
+      <p class="mt-5 text-center text-sm text-slate-400">
         Don't have an account?
         <RouterLink
           to="/register"
-          class="text-primary-600 no-underline font-medium hover:text-primary-700"
-          >Create one</RouterLink
+          class="font-semibold text-white transition hover:text-accent-300"
         >
+          Create one
+        </RouterLink>
       </p>
-      <!-- <div class="text-center mt-3 text-xs text-slate-400 italic">
-        <p><strong>Demo accounts:</strong></p>
-        <p>Customer: john@example.com / password123</p>
-        <p>Admin: admin@vueshop.com / admin123</p>
-      </div> -->
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.auth-input {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(226, 232, 240, 0.12);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e2e8f0;
+  padding: 0.75rem 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.auth-input::placeholder {
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.auth-input:focus {
+  border-color: rgba(56, 189, 248, 0.9);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+  background: rgba(15, 23, 42, 1);
+}
+</style>

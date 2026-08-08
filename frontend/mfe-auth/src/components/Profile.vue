@@ -49,153 +49,119 @@ const memberSince = new Date().toLocaleDateString("en-US", {
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div class="space-y-6">
     <!-- ========================================= -->
     <!-- HERO -->
     <!-- ========================================= -->
 
     <section
-      class="overflow-hidden rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 text-white shadow-xl"
+      class="overflow-hidden rounded-2xl bg-linear-to-r from-primary-950 via-primary-900 to-primary-800 text-white shadow-[0_20px_50px_rgba(15,23,42,0.28)]"
     >
       <div
-        class="grid items-center gap-8 px-6 py-8 md:grid-cols-[2fr_1fr] lg:px-10"
+        class="grid items-center gap-5 px-5 py-5 md:grid-cols-[2fr_1fr] lg:px-6"
       >
         <!-- Left -->
 
-        <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
           <img
             :src="auth.user?.avatar"
             alt="Avatar"
-            class="h-28 w-28 rounded-full border-4 border-white object-cover shadow-lg"
+            class="h-24 w-24 rounded-full border-4 border-white object-cover shadow-lg"
           />
 
-          <div>
+          <div class="space-y-3">
             <span
-              class="rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em]"
+              class="inline-flex rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-slate-200"
             >
               My Account
             </span>
 
-            <h1 class="mt-4 text-3xl font-bold md:text-4xl">
-              {{ auth.user?.name }}
-            </h1>
+            <div class="space-y-2">
+              <h1 class="text-3xl font-bold sm:text-4xl">
+                {{ auth.user?.name }}
+              </h1>
 
-            <p class="mt-2 text-slate-200">
-              {{ auth.user?.email }}
-            </p>
+              <p class="text-sm text-slate-200/90">
+                {{ auth.user?.email }}
+              </p>
+            </div>
 
             <div
-              class="mt-4 inline-flex items-center gap-2 rounded-full bg-green-500/20 px-4 py-2 text-sm"
+              class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-100"
             >
-              ✔ Verified Member
+              <span
+                class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-100"
+              >
+                ✔
+              </span>
+              Verified Member
             </div>
           </div>
         </div>
 
         <!-- Right -->
 
-        <div class="hidden rounded-3xl bg-white/10 p-6 backdrop-blur md:block">
-          <div class="grid grid-cols-2 gap-6 text-center">
-            <div>
-              <h3 class="text-3xl font-bold">
-                {{ auth.user?.role }}
-              </h3>
-
-              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
-                Role
-              </p>
-            </div>
-
-            <div>
-              <h3 class="text-3xl font-bold">
-                {{ memberSince }}
-              </h3>
-
-              <p class="mt-2 text-xs uppercase tracking-wider text-slate-300">
-                Member Since
-              </p>
-            </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div
+            class="rounded-2xl bg-white/10 p-4 backdrop-blur ring-1 ring-white/10"
+          >
+            <h3 class="text-2xl font-bold text-white">{{ auth.user?.role }}</h3>
+            <p
+              class="mt-2 text-xs uppercase tracking-[0.3em] text-slate-200/80"
+            >
+              Role
+            </p>
+          </div>
+          <div
+            class="rounded-2xl bg-white/10 p-4 backdrop-blur ring-1 ring-white/10"
+          >
+            <h3 class="text-2xl font-bold text-white">{{ memberSince }}</h3>
+            <p
+              class="mt-2 text-xs uppercase tracking-[0.3em] text-slate-200/80"
+            >
+              Member Since
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ========================================= -->
-    <!-- QUICK STATS -->
-    <!-- ========================================= -->
-
-    <!-- <section class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="rounded-2xl bg-white p-6 shadow-card">
-        <div class="text-4xl">📦</div>
-
-        <h3 class="mt-4 text-2xl font-bold">15</h3>
-
-        <p class="text-slate-500">Orders</p>
-      </div>
-
-      <div class="rounded-2xl bg-white p-6 shadow-card">
-        <div class="text-4xl">❤️</div>
-
-        <h3 class="mt-4 text-2xl font-bold">8</h3>
-
-        <p class="text-slate-500">Wishlist</p>
-      </div>
-
-      <div class="rounded-2xl bg-white p-6 shadow-card">
-        <div class="text-4xl">⭐</div>
-
-        <h3 class="mt-4 text-2xl font-bold">Premium</h3>
-
-        <p class="text-slate-500">Membership</p>
-      </div>
-
-      <div class="rounded-2xl bg-white p-6 shadow-card">
-        <div class="text-4xl">🛡️</div>
-
-        <h3 class="mt-4 text-2xl font-bold">Active</h3>
-
-        <p class="text-slate-500">Status</p>
-      </div>
-    </section> -->
-
-    <section class="grid gap-8 lg:grid-cols-[2fr_1fr]">
+    <section class="grid gap-5 lg:grid-cols-[2fr_1fr]">
       <!-- ========================================= -->
       <!-- PROFILE INFORMATION -->
       <!-- ========================================= -->
 
-      <div class="rounded-3xl bg-white p-8 shadow-card">
-        <div class="mb-8 flex items-center justify-between">
+      <div class="card p-5">
+        <div
+          class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+        >
           <div>
             <h2 class="text-2xl font-bold text-slate-900">
               Profile Information
             </h2>
-
             <p class="mt-1 text-sm text-slate-500">
               Manage your personal information.
             </p>
           </div>
 
-          <div class="flex gap-3">
+          <div class="flex flex-wrap gap-2">
             <button
               v-if="!isEditing"
               @click="isEditing = true"
-              class="rounded-xl border border-primary-600 px-5 py-2 font-semibold text-primary-600 transition hover:bg-primary-600 hover:text-white"
+              class="btn-outline px-4 py-2"
             >
               ✏ Edit Profile
             </button>
 
             <template v-else>
-              <button
-                @click="isEditing = false"
-                class="rounded-xl border border-slate-300 px-5 py-2 font-semibold text-slate-700 transition hover:bg-slate-100"
-              >
+              <button @click="isEditing = false" class="btn-outline px-4 py-2">
                 Cancel
               </button>
 
               <button
                 @click="saveProfile"
                 :disabled="loading"
-                class="rounded-xl bg-primary-600 px-5 py-2 font-semibold text-white transition hover:bg-primary-700 disabled:opacity-50"
+                class="btn-accent px-4 py-2"
               >
                 {{ loading ? "Saving..." : "Save Changes" }}
               </button>
@@ -207,13 +173,12 @@ const memberSince = new Date().toLocaleDateString("en-US", {
         <!-- VIEW MODE -->
         <!-- ========================================= -->
 
-        <div v-if="!isEditing" class="space-y-5">
+        <div v-if="!isEditing" class="grid gap-4">
           <div
-            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+            class="rounded-[1.75rem] bg-slate-50 p-5 sm:grid sm:grid-cols-[1fr_auto] sm:items-center"
           >
             <div>
               <p class="text-sm text-slate-500">👤 Full Name</p>
-
               <h4 class="mt-2 text-lg font-semibold text-slate-900">
                 {{ auth.user?.name }}
               </h4>
@@ -221,11 +186,10 @@ const memberSince = new Date().toLocaleDateString("en-US", {
           </div>
 
           <div
-            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+            class="rounded-[1.75rem] bg-slate-50 p-5 sm:grid sm:grid-cols-[1fr_auto] sm:items-center"
           >
             <div>
               <p class="text-sm text-slate-500">✉ Email Address</p>
-
               <h4 class="mt-2 text-lg font-semibold text-slate-900">
                 {{ auth.user?.email }}
               </h4>
@@ -233,13 +197,12 @@ const memberSince = new Date().toLocaleDateString("en-US", {
           </div>
 
           <div
-            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+            class="rounded-[1.75rem] bg-slate-50 p-5 sm:grid sm:grid-cols-[1fr_auto] sm:items-center"
           >
             <div>
               <p class="text-sm text-slate-500">🛡 Account Role</p>
-
               <span
-                class="mt-2 inline-flex rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700"
+                class="mt-2 inline-flex rounded-full bg-emerald-100 px-4 py-2 text-sm font-semibold text-emerald-700"
               >
                 {{ auth.user?.role }}
               </span>
@@ -247,11 +210,10 @@ const memberSince = new Date().toLocaleDateString("en-US", {
           </div>
 
           <div
-            class="flex items-center justify-between rounded-2xl bg-slate-50 p-5"
+            class="rounded-[1.75rem] bg-slate-50 p-5 sm:grid sm:grid-cols-[1fr_auto] sm:items-center"
           >
             <div>
               <p class="text-sm text-slate-500">📅 Member Since</p>
-
               <h4 class="mt-2 text-lg font-semibold text-slate-900">
                 {{ memberSince }}
               </h4>
@@ -265,10 +227,9 @@ const memberSince = new Date().toLocaleDateString("en-US", {
 
         <div v-else class="space-y-6">
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-600">
-              Full Name
-            </label>
-
+            <label class="mb-2 block text-sm font-medium text-slate-600"
+              >Full Name</label
+            >
             <input
               v-model="editName"
               type="text"
@@ -277,10 +238,9 @@ const memberSince = new Date().toLocaleDateString("en-US", {
           </div>
 
           <div>
-            <label class="mb-2 block text-sm font-medium text-slate-600">
-              Email Address
-            </label>
-
+            <label class="mb-2 block text-sm font-medium text-slate-600"
+              >Email Address</label
+            >
             <input
               v-model="editEmail"
               type="email"
@@ -294,33 +254,28 @@ const memberSince = new Date().toLocaleDateString("en-US", {
       <!-- ACCOUNT OVERVIEW -->
       <!-- ========================================= -->
 
-      <aside class="space-y-6">
-        <div class="rounded-3xl bg-white p-6 shadow-card">
-          <h3 class="mb-5 text-xl font-bold text-slate-900">
+      <aside class="space-y-4">
+        <div class="card p-4">
+          <h3 class="mb-4 text-xl font-bold text-slate-900">
             Account Overview
           </h3>
 
-          <div class="space-y-4">
+          <div class="space-y-4 text-sm text-slate-600">
             <div class="flex justify-between">
-              <span class="text-slate-500"> Status </span>
-
-              <span class="font-semibold text-green-600"> Active </span>
+              <span>Status</span>
+              <span class="font-semibold text-emerald-600">Active</span>
             </div>
 
             <div class="flex justify-between">
-              <span class="text-slate-500"> Member Since </span>
-
-              <span class="font-semibold">
-                {{ memberSince }}
-              </span>
+              <span>Member Since</span>
+              <span class="font-semibold">{{ memberSince }}</span>
             </div>
 
             <div class="flex justify-between">
-              <span class="text-slate-500"> Role </span>
-
-              <span class="capitalize font-semibold">
-                {{ auth.user?.role }}
-              </span>
+              <span>Role</span>
+              <span class="capitalize font-semibold">{{
+                auth.user?.role
+              }}</span>
             </div>
           </div>
         </div>
@@ -329,12 +284,10 @@ const memberSince = new Date().toLocaleDateString("en-US", {
         <!-- QUICK ACTIONS -->
         <!-- ========================================= -->
 
-        <div class="rounded-3xl bg-white p-6 shadow-card">
+        <div class="rounded-4xl bg-white p-6 shadow-card">
           <h3 class="mb-5 text-xl font-bold text-slate-900">Quick Actions</h3>
 
           <div class="grid gap-4">
-            <!-- Orders -->
-
             <RouterLink
               to="/orders"
               class="group flex items-center justify-between rounded-2xl border border-slate-200 p-4 no-underline transition hover:border-primary-500 hover:bg-primary-50"
@@ -345,22 +298,16 @@ const memberSince = new Date().toLocaleDateString("en-US", {
                 >
                   📦
                 </div>
-
                 <div>
                   <h4 class="font-semibold text-slate-900">My Orders</h4>
-
                   <p class="text-sm text-slate-500">View your order history</p>
                 </div>
               </div>
-
               <span
                 class="text-xl text-slate-400 transition group-hover:translate-x-1"
+                >→</span
               >
-                →
-              </span>
             </RouterLink>
-
-            <!-- Wishlist -->
 
             <RouterLink
               to="/wishlist"
@@ -372,22 +319,16 @@ const memberSince = new Date().toLocaleDateString("en-US", {
                 >
                   ❤️
                 </div>
-
                 <div>
                   <h4 class="font-semibold text-slate-900">Wishlist</h4>
-
                   <p class="text-sm text-slate-500">Your saved products</p>
                 </div>
               </div>
-
               <span
                 class="text-xl text-slate-400 transition group-hover:translate-x-1"
+                >→</span
               >
-                →
-              </span>
             </RouterLink>
-
-            <!-- Logout -->
 
             <button
               @click="handleLogout"
@@ -399,21 +340,17 @@ const memberSince = new Date().toLocaleDateString("en-US", {
                 >
                   🚪
                 </div>
-
                 <div>
                   <h4 class="font-semibold text-slate-900">Logout</h4>
-
                   <p class="text-sm text-slate-500">
                     Sign out from your account
                   </p>
                 </div>
               </div>
-
               <span
                 class="text-xl text-red-400 transition group-hover:translate-x-1"
+                >→</span
               >
-                →
-              </span>
             </button>
           </div>
         </div>

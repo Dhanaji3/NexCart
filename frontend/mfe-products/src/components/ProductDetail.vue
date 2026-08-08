@@ -240,36 +240,36 @@ function buyNow() {
                 </div>
               </div>
 
-              <div class="mt-6 flex flex-wrap items-center gap-4">
+              <div class="mt-6 grid gap-4 sm:grid-cols-2">
                 <button
+                  type="button"
                   @click="addToCart"
                   :disabled="!product.inStock"
-                  class="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2 text-sm font-semibold text-white shadow transition hover:from-cyan-400 hover:to-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  class="flex py-2 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {{
-                    cart.isInCart(product.id)
-                      ? "✓ Added to Cart"
-                      : "Add to Cart"
-                  }}
+                  {{ isInCart ? "✓ Added to Cart" : "Add to Cart" }}
                 </button>
+
                 <button
+                  type="button"
                   @click="buyNow"
                   :disabled="!product.inStock"
-                  class="rounded-2xl bg-cyan-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-50"
+                  class="flex py-2 items-center justify-center rounded-2xl border-2 border-slate-900 bg-slate-900 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   ⚡ Buy Now
                 </button>
               </div>
 
+              <!-- Wishlist -->
+
               <button
+                type="button"
                 @click="toggleWishlist"
-                class="mt-4 sm:mt-0 sm:w-auto rounded-full bg-pink-50 border border-pink-200 px-4 py-2 text-sm font-semibold text-pink-700 hover:bg-pink-100 transition"
+                class="mt-4 flex py-2 w-full items-center justify-center gap-2 rounded-2xl border border-pink-200 bg-pink-50 text-sm font-semibold text-pink-600 transition hover:bg-pink-100"
               >
-                {{
-                  cart.isInWishlist(product.id)
-                    ? "❤️ In Wishlist"
-                    : "🤍 Add to Wishlist"
-                }}
+                {{ isInWishlist ? "❤️" : "♡" }}
+
+                {{ isInWishlist ? "Remove from Wishlist" : "Add to Wishlist" }}
               </button>
             </div>
 

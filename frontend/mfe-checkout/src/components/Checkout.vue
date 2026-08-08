@@ -82,11 +82,11 @@ function goToOrders() {
 </script>
 
 <template>
-  <div class="py-4">
-    <h2 class="text-2xl font-bold text-slate-900 mb-6">Checkout</h2>
+  <div class="space-y-5 py-3">
+    <h2 class="text-2xl font-bold text-slate-900 mb-4">Checkout</h2>
 
     <!-- Order Success -->
-    <div v-if="orderPlaced" class="card text-center py-12">
+    <div v-if="orderPlaced" class="card text-center p-6 space-y-4">
       <div
         class="w-16 h-16 bg-accent-500 text-white rounded-full flex items-center justify-center text-3xl mx-auto mb-4"
       >
@@ -101,9 +101,11 @@ function goToOrders() {
       <p class="font-semibold text-accent-600 mb-6">
         Order ID: ORD-{{ Date.now().toString().slice(-6) }}
       </p>
-      <div class="flex gap-3 justify-center">
-        <button @click="goToOrders" class="btn-accent">View Orders</button>
-        <RouterLink to="/products" class="btn-outline"
+      <div class="flex flex-wrap justify-center gap-3">
+        <button @click="goToOrders" class="btn-accent px-4 py-2">
+          View Orders
+        </button>
+        <RouterLink to="/products" class="btn-outline px-4 py-2"
           >Continue Shopping</RouterLink
         >
       </div>
@@ -112,10 +114,10 @@ function goToOrders() {
     <!-- Checkout Steps -->
     <div v-else-if="cart.items.length > 0">
       <!-- Progress Steps -->
-      <div class="flex items-center justify-center gap-2 mb-8">
+      <div class="flex items-center justify-center gap-2 mb-5">
         <div class="flex items-center gap-2">
           <span
-            class="w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold"
+            class="w-8 h-8 flex items-center justify-center rounded-full text-[11px] font-bold"
             :class="
               currentStep > 1
                 ? 'bg-accent-500 text-white'
@@ -132,7 +134,7 @@ function goToOrders() {
           >
         </div>
         <div
-          class="h-0.5 w-12"
+          class="h-0.5 w-10"
           :class="currentStep > 1 ? 'bg-primary-600' : 'bg-slate-200'"
         ></div>
         <div class="flex items-center gap-2">
@@ -154,7 +156,7 @@ function goToOrders() {
           >
         </div>
         <div
-          class="h-0.5 w-12"
+          class="h-0.5 w-10"
           :class="currentStep > 2 ? 'bg-primary-600' : 'bg-slate-200'"
         ></div>
         <div class="flex items-center gap-2">
@@ -175,14 +177,14 @@ function goToOrders() {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-8 items-start">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4 items-start">
         <div>
           <!-- Step 1: Shipping -->
-          <div v-if="currentStep === 1" class="card space-y-4">
+          <div v-if="currentStep === 1" class="card p-4 space-y-4">
             <h3 class="text-lg font-semibold text-slate-900">
               Shipping Address
             </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-slate-700 mb-1.5"
                   >Full Name</label
@@ -256,7 +258,7 @@ function goToOrders() {
                 />
               </div>
             </div>
-            <div class="flex justify-end mt-6">
+            <div class="flex justify-end mt-3">
               <button @click="nextStep" class="btn-accent">
                 Continue to Payment
               </button>
@@ -264,11 +266,11 @@ function goToOrders() {
           </div>
 
           <!-- Step 2: Payment -->
-          <div v-if="currentStep === 2" class="card space-y-4">
+          <div v-if="currentStep === 2" class="card p-4 space-y-4">
             <h3 class="text-lg font-semibold text-slate-900">Payment Method</h3>
             <div class="flex flex-col gap-3">
               <label
-                class="flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors"
+                class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors"
                 :class="
                   paymentMethod === 'credit-card'
                     ? 'border-primary-500 bg-primary-50'
@@ -286,7 +288,7 @@ function goToOrders() {
                 >
               </label>
               <label
-                class="flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors"
+                class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors"
                 :class="
                   paymentMethod === 'paypal'
                     ? 'border-primary-500 bg-primary-50'
@@ -304,7 +306,7 @@ function goToOrders() {
                 >
               </label>
               <label
-                class="flex items-center gap-3 p-4 border rounded-lg cursor-pointer transition-colors"
+                class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors"
                 :class="
                   paymentMethod === 'apple-pay'
                     ? 'border-primary-500 bg-primary-50'
@@ -325,7 +327,7 @@ function goToOrders() {
 
             <div
               v-if="paymentMethod === 'credit-card'"
-              class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4"
+              class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4"
             >
               <div class="sm:col-span-2">
                 <label class="block text-sm font-medium text-slate-700 mb-1.5"
@@ -365,14 +367,18 @@ function goToOrders() {
               </div>
             </div>
 
-            <div class="flex justify-between mt-6">
-              <button @click="prevStep" class="btn-outline">← Back</button>
-              <button @click="nextStep" class="btn-accent">Review Order</button>
+            <div class="flex justify-between mt-3 gap-3">
+              <button @click="prevStep" class="btn-outline px-4 py-2">
+                ← Back
+              </button>
+              <button @click="nextStep" class="btn-accent px-4 py-2">
+                Review Order
+              </button>
             </div>
           </div>
 
           <!-- Step 3: Review -->
-          <div v-if="currentStep === 3" class="card space-y-4">
+          <div v-if="currentStep === 3" class="card p-4 space-y-4">
             <h3 class="text-lg font-semibold text-slate-900">
               Review Your Order
             </h3>
@@ -422,12 +428,14 @@ function goToOrders() {
                 }}</span>
               </div>
             </div>
-            <div class="flex justify-between mt-6">
-              <button @click="prevStep" class="btn-outline">← Back</button>
+            <div class="flex justify-between mt-3 gap-3">
+              <button @click="prevStep" class="btn-outline px-4 py-2">
+                ← Back
+              </button>
               <button
                 @click="placeOrder"
                 :disabled="isProcessing"
-                class="btn-accent"
+                class="btn-accent px-4 py-2"
               >
                 {{ isProcessing ? "Processing..." : "Place Order" }}
               </button>
@@ -436,7 +444,7 @@ function goToOrders() {
         </div>
 
         <!-- Order Summary Sidebar -->
-        <div class="card sticky top-20">
+        <div class="card sticky top-8 p-4">
           <h3 class="text-lg font-semibold text-slate-900 mb-4">
             Order Summary
           </h3>
@@ -464,7 +472,7 @@ function goToOrders() {
               >
             </div>
           </div>
-          <div class="space-y-2">
+          <div class="space-y-2 text-sm">
             <div class="flex justify-between text-sm text-slate-500">
               <span>Subtotal</span>
               <span>{{ formatCurrency(cart.totalPrice) }}</span>
@@ -487,7 +495,7 @@ function goToOrders() {
     </div>
 
     <!-- Empty Cart -->
-    <div v-else class="text-center py-16">
+    <div v-else class="text-center py-12">
       <p class="text-slate-500 mb-4">
         Your cart is empty. Add some products first!
       </p>

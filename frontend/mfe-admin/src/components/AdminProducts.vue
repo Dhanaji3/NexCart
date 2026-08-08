@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from "vue";
 import type { Product } from "shared";
+import { formatCurrency } from "shared";
 import { useAdminProductsApi } from "../composables";
 
 const {
@@ -130,25 +131,23 @@ async function saveProduct() {
 </script>
 
 <template>
-  <div class="space-y-8">
-    <!-- HERO -->
-
+  <div class="space-y-5">
     <section
-      class="overflow-hidden rounded-3xl bg-gradient-to-r from-primary-900 via-primary-800 to-primary-700 text-white shadow-xl"
+      class="overflow-hidden rounded-2xl bg-linear-to-r from-slate-900 via-indigo-900 to-violet-900 text-white shadow-xl"
     >
       <div
-        class="flex flex-col gap-8 p-8 lg:flex-row lg:items-center lg:justify-between"
+        class="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between lg:p-6"
       >
         <div>
           <span
-            class="rounded-full bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.3em]"
+            class="rounded-full bg-white/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.3em]"
           >
             Admin Dashboard
           </span>
 
-          <h1 class="mt-5 text-4xl font-bold">Product Management</h1>
+          <h1 class="mt-4 text-3xl font-bold">Product Management</h1>
 
-          <p class="mt-3 max-w-xl text-primary-100">
+          <p class="mt-2 max-w-xl text-sm text-slate-300">
             Manage your inventory, create new products, update stock and monitor
             your catalogue.
           </p>
@@ -156,66 +155,65 @@ async function saveProduct() {
 
         <button
           @click="openAddModal"
-          class="rounded-2xl bg-white px-6 py-3 font-semibold text-primary-700 transition hover:scale-105"
+          class="rounded-2xl bg-white px-5 py-3 font-semibold text-indigo-700 transition hover:bg-slate-100"
         >
           + Add Product
         </button>
       </div>
     </section>
 
-    <!-- STATS -->
-
-    <section class="grid gap-6 md:grid-cols-3">
-      <div class="rounded-3xl bg-white p-6 shadow-card">
-        <p class="text-sm text-slate-500">Total Products</p>
-
-        <h2 class="mt-3 text-4xl font-bold">
+    <section class="grid gap-4 md:grid-cols-3">
+      <div class="card !p-4 text-center">
+        <p class="text-xs uppercase tracking-wide text-slate-400">
+          Total Products
+        </p>
+        <h2 class="mt-2 text-3xl font-bold text-slate-900">
           {{ totalProducts }}
         </h2>
       </div>
 
-      <div class="rounded-3xl bg-white p-6 shadow-card">
-        <p class="text-sm text-slate-500">In Stock</p>
-
-        <h2 class="mt-3 text-4xl font-bold text-green-600">
+      <div class="card !p-4 text-center">
+        <p class="text-xs uppercase tracking-wide text-slate-400">In Stock</p>
+        <h2 class="mt-2 text-3xl font-bold text-green-600">
           {{ inStockProducts }}
         </h2>
       </div>
 
-      <div class="rounded-3xl bg-white p-6 shadow-card">
-        <p class="text-sm text-slate-500">Out Of Stock</p>
-
-        <h2 class="mt-3 text-4xl font-bold text-red-500">
+      <div class="card !p-4 text-center">
+        <p class="text-xs uppercase tracking-wide text-slate-400">
+          Out Of Stock
+        </p>
+        <h2 class="mt-2 text-3xl font-bold text-red-500">
           {{ outOfStockProducts }}
         </h2>
       </div>
     </section>
 
-    <!-- NAVIGATION -->
-
-    <div class="flex flex-wrap items-center justify-between gap-5">
-      <div class="inline-flex rounded-2xl bg-slate-100 p-1">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div
+        class="inline-flex rounded-xl border border-slate-700 bg-slate-900/70 p-1"
+      >
         <RouterLink
           to="/admin"
-          class="rounded-xl px-5 py-2.5 font-semibold text-slate-600 transition-all"
-          active-class="bg-primary-600 text-white shadow"
-          exact-active-class="bg-primary-600 text-white shadow"
+          class="rounded-xl px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:text-white"
+          active-class="bg-emerald-500 text-white shadow"
+          exact-active-class="bg-emerald-500 text-white shadow"
         >
           📊 Overview
         </RouterLink>
 
         <RouterLink
           to="/admin/products"
-          class="rounded-xl px-5 py-2.5 font-semibold text-slate-600 transition-all"
-          active-class="bg-primary-600 text-white shadow"
+          class="rounded-xl px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:text-white"
+          active-class="bg-emerald-500 text-white shadow"
         >
           📦 Products
         </RouterLink>
 
         <RouterLink
           to="/admin/orders"
-          class="rounded-xl px-5 py-2.5 font-semibold text-slate-600 transition-all"
-          active-class="bg-primary-600 text-white shadow"
+          class="rounded-xl px-4 py-2 text-sm font-semibold text-slate-300 transition-all hover:text-white"
+          active-class="bg-emerald-500 text-white shadow"
         >
           🛒 Orders
         </RouterLink>
@@ -224,16 +222,11 @@ async function saveProduct() {
       <input
         v-model="search"
         placeholder="Search products..."
-        class="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-primary-500 lg:w-80"
+        class="input lg:w-80"
       />
     </div>
 
-    <!-- LOADING -->
-
-    <div
-      v-if="loading"
-      class="rounded-3xl bg-white p-12 text-center shadow-card"
-    >
+    <div v-if="loading" class="card text-center py-10">
       <div
         class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-primary-200 border-t-primary-600"
       ></div>
@@ -241,184 +234,130 @@ async function saveProduct() {
       <p class="mt-5 text-slate-500">Loading products...</p>
     </div>
 
-    <!-- ERROR -->
-
-    <div
-      v-else-if="error"
-      class="rounded-3xl bg-white p-12 text-center shadow-card"
-    >
+    <div v-else-if="error" class="card text-center py-10">
       <h2 class="text-xl font-bold text-red-600">
         {{ error }}
       </h2>
 
-      <button
-        @click="fetchProducts"
-        class="mt-6 rounded-xl bg-primary-600 px-5 py-3 text-white"
-      >
-        Retry
-      </button>
+      <button @click="fetchProducts" class="btn-primary">Retry</button>
     </div>
 
     <template v-else>
-      <!-- ====================================== -->
-      <!-- PRODUCTS TABLE -->
-      <!-- ====================================== -->
-
-      <div class="overflow-hidden rounded-3xl bg-white shadow-card">
+      <div
+        class="overflow-hidden rounded-2xl border border-slate-700 bg-slate-900/70"
+      >
         <div
-          class="flex items-center justify-between border-b border-slate-100 px-6 py-5"
+          class="flex items-center justify-between border-b border-slate-700 px-4 py-3"
         >
           <div>
-            <h2 class="text-xl font-bold text-slate-900">Products</h2>
-
-            <p class="mt-1 text-sm text-slate-500">
+            <h2 class="text-xl font-bold text-slate-100">Products</h2>
+            <p class="mt-1 text-sm text-slate-400">
               {{ filteredProducts.length }} products found
             </p>
           </div>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="min-w-full">
-            <thead class="bg-slate-50">
+          <table class="min-w-full text-left text-sm">
+            <thead
+              class="bg-slate-800/80 text-xs uppercase tracking-wide text-slate-300"
+            >
               <tr>
-                <th
-                  class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
-                >
-                  Product
-                </th>
-
-                <th
-                  class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
-                >
-                  Category
-                </th>
-
-                <th
-                  class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
-                >
-                  Price
-                </th>
-
-                <th
-                  class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
-                >
-                  Rating
-                </th>
-
-                <th
-                  class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500"
-                >
-                  Stock
-                </th>
-
-                <th
-                  class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-500"
-                >
-                  Actions
-                </th>
+                <th class="px-4 py-3 font-medium">Product</th>
+                <th class="px-4 py-3 font-medium">Category</th>
+                <th class="px-4 py-3 font-medium">Price</th>
+                <th class="px-4 py-3 font-medium">Rating</th>
+                <th class="px-4 py-3 font-medium">Stock</th>
+                <th class="px-4 py-3 text-right font-medium">Actions</th>
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-slate-100">
+            <tbody>
               <tr
                 v-for="product in filteredProducts"
                 :key="product.id"
-                class="transition hover:bg-slate-50"
+                class="border-t border-slate-700/80 text-slate-200 transition hover:bg-slate-800/60"
               >
-                <!-- Product -->
-
-                <td class="px-6 py-5">
+                <td class="px-4 py-4">
                   <div class="flex items-center gap-4">
                     <img
                       :src="product.image"
                       :alt="product.name"
-                      class="h-16 w-16 rounded-2xl border border-slate-200 bg-slate-50 object-contain p-2"
+                      class="h-16 w-16 rounded-2xl border border-slate-600 bg-slate-800 object-contain p-2"
                     />
 
                     <div>
-                      <h3 class="font-semibold text-slate-900">
+                      <h3 class="font-semibold text-slate-100">
                         {{ product.name }}
                       </h3>
 
-                      <p class="mt-1 text-sm text-slate-500">
+                      <p class="mt-1 text-sm text-slate-400">
                         SKU : {{ product.sku }}
                       </p>
                     </div>
                   </div>
                 </td>
 
-                <!-- Category -->
-
-                <td class="px-6 py-5">
+                <td class="px-4 py-4">
                   <span
-                    class="rounded-full bg-primary-50 px-3 py-1 text-sm font-medium capitalize text-primary-700"
+                    class="rounded-full bg-indigo-500/10 px-3 py-1 text-sm font-medium capitalize text-indigo-300"
                   >
                     {{ product.category }}
                   </span>
                 </td>
 
-                <!-- Price -->
-
-                <td class="px-6 py-5">
-                  <span class="text-lg font-bold text-primary-700">
+                <td class="px-4 py-4">
+                  <span class="text-lg font-bold text-emerald-300">
                     {{ formatCurrency(product.price) }}
                   </span>
                 </td>
 
-                <!-- Rating -->
-
-                <td class="px-6 py-5">
+                <td class="px-4 py-4">
                   <div class="flex items-center gap-2">
-                    <span class="text-yellow-500"> ⭐ </span>
-
-                    <span class="font-semibold">
+                    <span class="text-yellow-400">⭐</span>
+                    <span class="font-semibold text-slate-100">
                       {{ product.rating }}
                     </span>
-
                     <span class="text-sm text-slate-400">
                       ({{ product.reviews }})
                     </span>
                   </div>
                 </td>
 
-                <!-- Stock -->
-
-                <td class="px-6 py-5">
+                <td class="px-4 py-4">
                   <div class="space-y-2">
                     <span
                       class="inline-flex rounded-full px-3 py-1 text-sm font-semibold"
                       :class="
                         product.inStock
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-700'
+                          ? 'bg-green-500/15 text-green-300'
+                          : 'bg-red-500/15 text-red-300'
                       "
                     >
                       {{ product.inStock ? "In Stock" : "Out of Stock" }}
                     </span>
 
-                    <div class="text-sm text-slate-500">
+                    <div class="text-sm text-slate-400">
                       Qty :
-                      <strong>
+                      <strong class="text-slate-200">
                         {{ product.stock ?? 0 }}
                       </strong>
                     </div>
                   </div>
                 </td>
 
-                <!-- Actions -->
-
-                <td class="px-6 py-5">
+                <td class="px-4 py-4">
                   <div class="flex justify-end gap-3">
                     <button
                       @click="editProduct(product)"
-                      class="rounded-xl bg-amber-100 px-4 py-2 font-semibold text-amber-700 transition hover:bg-amber-200"
+                      class="rounded-xl border border-slate-600 bg-slate-700/80 px-4 py-2 font-semibold text-slate-100 transition hover:border-amber-400 hover:bg-amber-500/20 hover:text-amber-100"
                     >
                       ✏️ Edit
                     </button>
 
                     <button
                       @click="deleteProduct(product.id)"
-                      class="rounded-xl bg-red-100 px-4 py-2 font-semibold text-red-600 transition hover:bg-red-200"
+                      class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 font-semibold text-red-300 transition hover:border-red-300 hover:bg-red-500/25 hover:text-red-100"
                     >
                       🗑 Delete
                     </button>
@@ -430,15 +369,11 @@ async function saveProduct() {
         </div>
       </div>
 
-      <!-- ====================================== -->
-      <!-- MOBILE PRODUCT CARDS -->
-      <!-- ====================================== -->
-
-      <div class="grid gap-5 lg:hidden">
+      <div class="grid gap-4 lg:hidden">
         <article
           v-for="product in filteredProducts"
           :key="'mobile-' + product.id"
-          class="rounded-3xl bg-white p-5 shadow-card"
+          class="card p-4"
         >
           <div class="flex gap-4">
             <img
@@ -509,12 +444,10 @@ async function saveProduct() {
       >
         <form
           @submit.prevent="saveProduct"
-          class="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-3xl bg-white shadow-2xl"
+          class="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
         >
-          <!-- Header -->
-
           <div
-            class="sticky top-0 z-10 flex items-center justify-between border-b bg-white px-8 py-6"
+            class="sticky top-0 z-10 flex items-center justify-between border-b bg-white px-5 py-4"
           >
             <div>
               <h2 class="text-2xl font-bold text-slate-900">
@@ -541,7 +474,7 @@ async function saveProduct() {
 
           <!-- Body -->
 
-          <div class="grid gap-8 p-8 lg:grid-cols-[2fr_1fr]">
+          <div class="grid gap-4 p-4 lg:grid-cols-[2fr_1fr]">
             <!-- LEFT -->
 
             <div class="space-y-6">
@@ -703,7 +636,7 @@ async function saveProduct() {
 
               <!-- Preview -->
 
-              <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <h3 class="mb-5 text-center font-semibold text-slate-700">
                   Image Preview
                 </h3>
@@ -741,7 +674,7 @@ async function saveProduct() {
           <!-- Footer -->
 
           <div
-            class="sticky bottom-0 flex justify-end gap-4 border-t bg-white px-8 py-6"
+            class="sticky bottom-0 flex justify-end gap-3 border-t bg-white px-5 py-4"
           >
             <button
               type="button"
